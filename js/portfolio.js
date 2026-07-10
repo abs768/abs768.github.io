@@ -13,17 +13,66 @@
   const EMAIL = 'abhavanishankar2002@gmail.com';
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  // custom cursor
+  // contextual cursor: orb by default, a grey rounded rect wrapping
+  // tiles/buttons on hover, a text caret over plain copy
   const cursor = document.getElementById('cursor');
   if (cursor && finePointer) {
+    const BOX_SEL = '.tile, .btn, .fab, .footer__home';
+    const TEXT_SEL = 'p, h1, h2, h3, li, a, span, textarea';
+    let mx = -1000;
+    let my = -1000;
+    let boxEl = null;
+    let caretEl = null;
+    const cur = { x: -1000, y: -1000, w: 36, h: 36, r: 18 };
+
     document.addEventListener('mousemove', (e) => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+      mx = e.clientX;
+      my = e.clientY;
     }, { passive: true });
 
     document.addEventListener('mouseover', (e) => {
-      cursor.classList.toggle('is-link', !!e.target.closest('a, button, textarea'));
+      boxEl = e.target.closest(BOX_SEL);
+      caretEl = boxEl ? null : e.target.closest(TEXT_SEL);
     });
+
+    const lerp = (a, b, t) => a + (b - a) * t;
+
+    (function cursorLoop() {
+      let tx = mx;
+      let ty = my;
+      let tw = 36;
+      let th = 36;
+      let tr = 18;
+
+      if (boxEl && boxEl.isConnected) {
+        const r = boxEl.getBoundingClientRect();
+        tx = r.left + r.width / 2;
+        ty = r.top + r.height / 2;
+        tw = r.width + 14;
+        th = r.height + 14;
+        const br = parseFloat(getComputedStyle(boxEl).borderRadius);
+        tr = Number.isFinite(br) && br > 0 ? Math.min(br + 7, th / 2) : 10;
+      } else if (caretEl && caretEl.isConnected) {
+        tw = 3.5;
+        th = parseFloat(getComputedStyle(caretEl).fontSize) * 1.4;
+        tr = 2;
+      }
+
+      const t = 0.24;
+      cur.x = lerp(cur.x, tx, t);
+      cur.y = lerp(cur.y, ty, t);
+      cur.w = lerp(cur.w, tw, t);
+      cur.h = lerp(cur.h, th, t);
+      cur.r = lerp(cur.r, tr, t);
+
+      cursor.style.left = cur.x + 'px';
+      cursor.style.top = cur.y + 'px';
+      cursor.style.width = cur.w + 'px';
+      cursor.style.height = cur.h + 'px';
+      cursor.style.borderRadius = cur.r + 'px';
+
+      requestAnimationFrame(cursorLoop);
+    })();
   }
 
   // magnetic buttons
@@ -78,15 +127,14 @@
   }
 
 
-  // intro: scribble "my story" stroke by stroke, then hand off to the greeting
+  // intro: "my story" in chunky rounded letterforms that pop in,
+  // then hand off to the greeting
   const introAnim = document.getElementById('introAnim');
   const intro = document.getElementById('intro');
   const reduceMotionIntro = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (intro && introAnim && !reduceMotionIntro) {
-    const strokes = introAnim.querySelectorAll('.scr');
-    const DRAW_MS = 700;    // how long each letter takes to write
-    const STAGGER_MS = 480; // gap before the next letter starts
+    const letterCount = introAnim.querySelectorAll('.intro__letter').length;
     let advanced = false;
 
     const advance = () => {
@@ -96,25 +144,14 @@
       setTimeout(() => {
         document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
       }, 700);
-      // once we've moved on, bring the finished word back so scrolling
+      // once we've moved on, bring the word back so scrolling
       // up doesn't land on an empty screen
       setTimeout(() => intro.classList.remove('intro--done'), 2800);
     };
 
-    strokes.forEach((path, i) => {
-      const len = path.getTotalLength();
-      path.style.strokeDasharray = String(len);
-      path.style.strokeDashoffset = String(len);
-      path.style.visibility = 'visible';
-      path.animate(
-        [{ strokeDashoffset: len }, { strokeDashoffset: 0 }],
-        { duration: DRAW_MS, delay: 400 + i * STAGGER_MS, easing: 'ease-in-out', fill: 'forwards' }
-      );
-    });
-
-    // once the word is written, pause, then fade and move on
-    const totalMs = 400 + (strokes.length - 1) * STAGGER_MS + DRAW_MS;
-    const autoTimer = setTimeout(advance, totalMs + 1100);
+    // matches the CSS: 0.25s lead-in, 0.14s stagger, 0.85s pop
+    const totalMs = 250 + (letterCount - 1) * 140 + 850;
+    const autoTimer = setTimeout(advance, totalMs + 1300);
 
     // a user gesture skips the wait and hands off immediately
     ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((evt) => {
@@ -123,9 +160,6 @@
         advance();
       }, { once: true, passive: true });
     });
-  } else if (intro) {
-    // reduced motion: show the finished word, no auto-scroll
-    intro.querySelectorAll('.scr').forEach((p) => { p.style.visibility = 'visible'; });
   }
 
   // scroll reveal

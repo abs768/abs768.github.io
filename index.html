@@ -37,22 +37,23 @@
   <!-- intro animation: "my story", hand-scribbled stroke by stroke -->
   <section class="intro" id="intro" aria-label="my story">
     <div class="intro__anim" id="introAnim" aria-hidden="true">
-      <svg class="intro__svg" viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+      <svg class="intro__svg" viewBox="0 0 580 250" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="scribble" x="-10%" y="-10%" width="120%" height="120%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" result="noise" seed="7"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
-          </filter>
+          <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#ff9ab8"/></linearGradient>
+          <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe07a"/><stop offset="1" stop-color="#ffb45c"/></linearGradient>
+          <linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#008fff"/></linearGradient>
+          <linearGradient id="lg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b48aff"/><stop offset="1" stop-color="#7d5cff"/></linearGradient>
+          <linearGradient id="lg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ee6a8"/><stop offset="1" stop-color="#9be15d"/></linearGradient>
+          <linearGradient id="lg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a5c"/><stop offset="1" stop-color="#ff5c8a"/></linearGradient>
+          <linearGradient id="lg7" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ad7ff"/><stop offset="1" stop-color="#b48aff"/></linearGradient>
         </defs>
-        <g filter="url(#scribble)">
-          <path class="scr" stroke="#ff5c8a" d="M34,150 C32,125 33,100 35,80 C43,66 59,70 60,86 L61,146 C61,112 64,84 72,77 C82,69 92,76 93,92 L94,150"/>
-          <path class="scr" stroke="#ffe07a" d="M122,80 C120,102 120,122 126,138 C136,148 150,140 152,122 L154,80 C152,120 150,158 146,178 C140,200 118,198 116,180"/>
-          <path class="scr" stroke="#00b2ff" d="M247,86 C238,70 214,72 212,88 C210,104 240,104 246,120 C252,138 228,150 214,138"/>
-          <path class="scr" stroke="#b48aff" d="M292,48 C290,80 288,115 290,132 C292,144 304,146 312,136 M272,82 L314,80"/>
-          <path class="scr" stroke="#2ee6a8" d="M362,78 C344,82 338,104 346,120 C354,136 378,138 388,124 C398,108 392,84 374,78 C370,77 366,77 362,78"/>
-          <path class="scr" stroke="#ff8a5c" d="M424,78 C422,100 422,120 424,140 M424,104 C428,88 442,74 458,78"/>
-          <path class="scr" stroke="#7ad7ff" d="M488,80 C486,102 486,122 492,138 C502,148 516,140 518,122 L520,80 C518,120 516,158 512,178 C506,200 484,198 482,180"/>
-        </g>
+        <path class="intro__letter" style="--i:0" stroke="url(#lg1)" d="M40,170 L40,112 C40,84 72,84 72,112 L72,170 M72,112 C72,84 104,84 104,112 L104,170"/>
+        <path class="intro__letter" style="--i:1" stroke="url(#lg2)" d="M136,100 L136,140 C136,163 170,163 170,140 L170,100 M170,140 L170,192 C170,216 142,218 134,202"/>
+        <path class="intro__letter" style="--i:2" stroke="url(#lg3)" d="M258,104 C250,92 224,92 224,110 C224,126 258,124 258,142 C258,160 230,160 222,148"/>
+        <path class="intro__letter" style="--i:3" stroke="url(#lg4)" d="M298,68 L298,148 C298,166 318,168 326,158 M280,104 L320,104"/>
+        <circle class="intro__letter" style="--i:4" stroke="url(#lg5)" cx="374" cy="134" r="35" fill="none"/>
+        <path class="intro__letter" style="--i:5" stroke="url(#lg6)" d="M436,100 L436,170 M436,130 C436,106 464,98 472,106"/>
+        <path class="intro__letter" style="--i:6" stroke="url(#lg7)" d="M504,100 L504,140 C504,163 538,163 538,140 L538,100 M538,140 L538,192 C538,216 510,218 502,202"/>
       </svg>
     </div>
   </section>
