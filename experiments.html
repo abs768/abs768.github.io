@@ -46,6 +46,38 @@
       score from 2/16 to 16/16 as knowledge compounds.
     </p>
 
+    <div class="tiltcard" id="graphTilt">
+      <svg class="tiltcard__svg" viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" aria-label="Interactive case graph">
+        <g class="tilt-far" stroke="#6f5cf0" stroke-width="0.9" opacity="0.4" fill="none">
+          <path d="M280,170 L120,80 M280,170 L230,52 M280,170 L360,58 M280,170 L455,96 M280,170 L470,190 M280,170 L385,255 M280,170 L215,272 M280,170 L105,205 M360,58 L455,96 M360,58 L230,52 M455,96 L470,190"/>
+        </g>
+        <g class="tilt-near">
+          <g fill="#8f949c">
+            <circle cx="120" cy="80" r="5"/>
+            <circle cx="230" cy="52" r="5"/>
+            <circle cx="360" cy="58" r="5"/>
+            <circle cx="455" cy="96" r="5"/>
+            <circle cx="470" cy="190" r="5"/>
+            <circle cx="385" cy="255" r="5"/>
+            <circle cx="215" cy="272" r="5"/>
+            <circle cx="105" cy="205" r="4" opacity="0.55"/>
+          </g>
+          <circle class="tilt-pulse" cx="280" cy="170" r="8" fill="#8a63f5"/>
+          <g class="tile-nodegraph__labels" text-anchor="middle">
+            <text x="120" y="98">final_report</text>
+            <text x="230" y="40">contradictions</text>
+            <text x="360" y="46">iocs</text>
+            <text x="455" y="114">hypotheses</text>
+            <text x="470" y="208">entities</text>
+            <text x="385" y="273">timeline</text>
+            <text x="215" y="290">open_questions</text>
+            <text x="280" y="192">index</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <p class="card-hint">move your cursor &mdash; the case graph follows</p>
+
     <div class="xp-diagram">
       <svg class="diag" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" aria-label="Forensic LLM Wiki architecture">
         <g class="diag-box">
@@ -198,6 +230,23 @@
       explicit refusal when retrieval comes up empty, instead of a made-up answer.
     </p>
 
+    <div class="device" id="docDevice">
+      <div class="device__screen">
+        <div class="chatdemo">
+          <div class="chatdemo__bubble chatdemo__bubble--q">
+            <span id="chatQ"></span><span class="chatdemo__caret" aria-hidden="true"></span>
+          </div>
+          <div class="chatdemo__bubble chatdemo__bubble--a" id="chatA">
+            <p id="chatAText"></p>
+            <div class="chatdemo__cites" id="chatCites"></div>
+          </div>
+        </div>
+      </div>
+      <div class="device__stand" aria-hidden="true"></div>
+      <div class="device__foot" aria-hidden="true"></div>
+    </div>
+    <p class="card-hint">a private conversation, rendered live &mdash; it grows as you scroll</p>
+
     <div class="xp-diagram">
       <svg class="diag" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" aria-label="DocGPT architecture">
         <g class="diag-box">
@@ -338,7 +387,7 @@
     </p>
 
     <div class="xp-diagram xp-diagram--wide">
-      <svg class="diag" viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" aria-label="MarketPulse streaming pipeline">
+      <svg class="diag" id="pipeSvg" viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" aria-label="MarketPulse streaming pipeline">
         <!-- lanes -->
         <path id="pipe-a" d="M120,60 L180,60" fill="none" stroke="none"/>
         <path id="pipe-b" d="M290,60 L350,60" fill="none" stroke="none"/>
@@ -391,6 +440,12 @@
         </g>
       </svg>
     </div>
+    <button class="replay" data-replay="pipeSvg" aria-label="Replay the stream">&#8635;</button>
+
+    <div class="zoomcard" id="dashZoom">
+      <img src="images/Dashboard.png" alt="MarketPulse dashboard — move your cursor to inspect">
+    </div>
+    <p class="card-hint">hover to inspect the dashboard up close</p>
 
     <div class="xp-reqs">
       <div>
@@ -470,7 +525,7 @@
     </p>
 
     <div class="xp-diagram">
-      <svg class="diag" viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" aria-label="Orbit sketch">
+      <svg class="diag" id="orbitSvg" viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" aria-label="Orbit sketch">
         <circle cx="320" cy="95" r="16" fill="#ffe07a"/>
         <ellipse cx="320" cy="95" rx="120" ry="52" fill="none" stroke="#7e838c" stroke-width="1" stroke-dasharray="3,4"/>
         <ellipse cx="320" cy="95" rx="210" ry="82" fill="none" stroke="#7e838c" stroke-width="1" stroke-dasharray="3,4"/>
@@ -482,6 +537,7 @@
         </circle>
       </svg>
     </div>
+    <button class="replay" data-replay="orbitSvg" aria-label="Replay the orbits">&#8635;</button>
 
     <div class="xp-specs">
       <span>unity</span><span>deep rl</span><span>ar/vr</span><span>c#</span>

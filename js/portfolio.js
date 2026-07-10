@@ -239,6 +239,109 @@
     }
   }
 
+  // ===== lab: interactive cards (all guarded; only exist on experiments.html)
+  const reduceMotionLab = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // tilt card: graph follows the cursor with a little parallax depth
+  const graphTilt = document.getElementById('graphTilt');
+  if (graphTilt && finePointer && !reduceMotionLab) {
+    const svg = graphTilt.querySelector('.tiltcard__svg');
+    const far = graphTilt.querySelector('.tilt-far');
+    const near = graphTilt.querySelector('.tilt-near');
+    graphTilt.addEventListener('mousemove', (e) => {
+      const r = graphTilt.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      svg.style.transform = `rotateY(${px * 14}deg) rotateX(${py * -14}deg)`;
+      far.style.transform = `translate(${px * -10}px, ${py * -10}px)`;
+      near.style.transform = `translate(${px * 8}px, ${py * 8}px)`;
+    });
+    graphTilt.addEventListener('mouseleave', () => {
+      svg.style.transform = '';
+      far.style.transform = '';
+      near.style.transform = '';
+    });
+  }
+
+  // display mockup: grows gently as it crosses the viewport
+  const docDevice = document.getElementById('docDevice');
+  if (docDevice && !reduceMotionLab) {
+    const onScroll = () => {
+      const r = docDevice.getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      const progress = Math.max(0, 1 - Math.abs(mid - innerHeight / 2) / (innerHeight / 2));
+      docDevice.style.transform = `scale(${(0.94 + progress * 0.08).toFixed(4)})`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // the conversation on the screen: type, answer, cite, repeat
+  const chatQ = document.getElementById('chatQ');
+  const chatA = document.getElementById('chatA');
+  const chatAText = document.getElementById('chatAText');
+  const chatCites = document.getElementById('chatCites');
+  if (chatQ && chatA && chatAText && chatCites) {
+    const turns = [
+      { q: 'what does the warranty cover?', a: 'Parts and labor for 24 months — accidental damage is excluded.', c: ['p.4 §2', 'p.11 §5'] },
+      { q: 'who signed the 2019 agreement?', a: 'No retrieved passage answers this. I can\u2019t say.', c: ['refusal'] },
+      { q: 'summarize the termination clause', a: 'Either party may exit with 30 days\u2019 written notice after year one.', c: ['p.7 §9'] }
+    ];
+    if (reduceMotionLab) {
+      chatQ.textContent = turns[0].q;
+      chatAText.textContent = turns[0].a;
+      chatCites.innerHTML = turns[0].c.map((c) => `<span>${c}</span>`).join('');
+      chatA.classList.add('is-in');
+    } else {
+      let turn = 0;
+      const playTurn = () => {
+        const t = turns[turn % turns.length];
+        turn += 1;
+        chatQ.textContent = '';
+        chatA.classList.remove('is-in');
+        let i = 0;
+        const type = setInterval(() => {
+          chatQ.textContent = t.q.slice(0, ++i);
+          if (i >= t.q.length) {
+            clearInterval(type);
+            setTimeout(() => {
+              chatAText.textContent = t.a;
+              chatCites.innerHTML = t.c.map((c) => `<span>${c}</span>`).join('');
+              chatA.classList.add('is-in');
+              setTimeout(playTurn, 3600);
+            }, 600);
+          }
+        }, 55);
+      };
+      playTurn();
+    }
+  }
+
+  // hover-to-zoom dashboard: origin follows the cursor
+  const dashZoom = document.getElementById('dashZoom');
+  if (dashZoom) {
+    const img = dashZoom.querySelector('img');
+    if (finePointer) {
+      dashZoom.addEventListener('mousemove', (e) => {
+        const r = dashZoom.getBoundingClientRect();
+        img.style.transformOrigin =
+          `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}% ${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`;
+      });
+      dashZoom.addEventListener('mouseenter', () => dashZoom.classList.add('is-zoomed'));
+      dashZoom.addEventListener('mouseleave', () => dashZoom.classList.remove('is-zoomed'));
+    } else {
+      dashZoom.addEventListener('click', () => dashZoom.classList.toggle('is-zoomed'));
+    }
+  }
+
+  // replay buttons rewind SMIL animations
+  document.querySelectorAll('[data-replay]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const svg = document.getElementById(btn.dataset.replay);
+      if (svg && svg.setCurrentTime) svg.setCurrentTime(0);
+    });
+  });
+
   // scroll reveal
   const targets = document.querySelectorAll('section, .workgrid__item');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
