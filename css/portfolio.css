@@ -793,35 +793,40 @@ a:hover {
 }
 
 /* ============ speak-style work list ============ */
+.speaking {
+  max-width: 64rem; /* the list needs the wide column to breathe */
+}
+
 .engagement-list {
   list-style: none;
   margin: 3em 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1em 2.5em;
+  gap: 2.4em 3em;
 }
 
 .engagement-list__item a {
   display: flex;
-  gap: 1.3em;
+  gap: 2em;
   align-items: flex-start;
 }
 
 .engagement-list__item .tile {
-  flex: 0 0 38%;
-  max-width: 180px;
+  flex: 0 0 30%;
+  max-width: 190px;
 }
 
 .engagement-list__text h2 {
-  font-size: 1rem;
-  margin-top: 0.15em;
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-top: 0.1em;
 }
 
 .engagement-list__text p {
   margin: 0;
   color: var(--mono-gray);
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 /* ============ footer ============ */
