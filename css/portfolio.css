@@ -144,7 +144,7 @@ body {
 
 /* sections: centered content column with faint vertical grid lines */
 section {
-  max-width: 46rem;
+  max-width: 64rem;
   line-height: var(--mono-line-height);
   margin: 0 auto;
   padding: 3.3em 1rem 3em;
@@ -902,5 +902,130 @@ a:hover {
   }
   a:hover {
     animation: none;
+  }
+}
+
+/* ============ lab / experiments page ============ */
+.xp-nav {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.4em 1rem 0;
+  font-size: 0.95rem;
+}
+
+.xp-nav a {
+  color: var(--mono-gray);
+}
+
+.xp-nav a:hover {
+  color: var(--mono-blue);
+}
+
+.xp {
+  padding-bottom: 4.5em;
+}
+
+.xp__kicker {
+  margin: 0 0 0.3em;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--mono-gray);
+}
+
+.xp h1 {
+  margin-bottom: 0.35em;
+}
+
+.xp .section__lead {
+  margin-bottom: 0;
+}
+
+.xp-diagram {
+  margin: 2.4em 0 0;
+  max-width: 640px;
+}
+
+.xp-diagram--wide {
+  max-width: 100%;
+}
+
+.diag {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.diag-box rect {
+  fill: #16161c;
+  stroke: #7e838c;
+  stroke-width: 1;
+  rx: 3;
+}
+
+.diag-arrow path {
+  fill: none;
+  stroke: #7e838c;
+  stroke-width: 1;
+}
+
+.diag-label text {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  fill: #cfd3da;
+}
+
+.diag-label .diag-dim {
+  fill: var(--mono-gray);
+  font-size: 10px;
+}
+
+.xp-reqs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2em 3em;
+  margin-top: 2.2em;
+  max-width: 52em;
+}
+
+.xp-reqs h4 {
+  margin: 0 0 0.5em;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--mono-gray);
+  letter-spacing: 0.04em;
+}
+
+.xp-reqs ul {
+  margin: 0;
+  padding-left: 1.1em;
+}
+
+.xp-reqs li {
+  margin: 0.35em 0;
+  color: #9aa0a8;
+  font-size: 0.85rem;
+  font-weight: 300;
+}
+
+.xp-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+  margin-top: 2em;
+}
+
+.xp-specs span {
+  border: 1px solid #26262e;
+  border-radius: 2em;
+  padding: 0.35em 0.85em;
+  font-size: 0.75rem;
+  color: #9aa0a8;
+}
+
+@media (max-width: 47.99em) {
+  .xp-reqs {
+    grid-template-columns: 1fr;
   }
 }
