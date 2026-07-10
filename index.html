@@ -34,13 +34,31 @@
 <body>
   <div id="cursor" aria-hidden="true"></div>
 
-  <!-- intro animation -->
+  <!-- intro animation: "my story", hand-scribbled stroke by stroke -->
   <section class="intro" id="intro" aria-label="my story">
-    <div class="intro__anim" id="introAnim" aria-hidden="true"></div>
+    <div class="intro__anim" id="introAnim" aria-hidden="true">
+      <svg class="intro__svg" viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="scribble" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="2" result="noise" seed="7"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
+          </filter>
+        </defs>
+        <g filter="url(#scribble)">
+          <path class="scr" stroke="#ff5c8a" d="M34,150 C32,125 33,100 35,80 C43,66 59,70 60,86 L61,146 C61,112 64,84 72,77 C82,69 92,76 93,92 L94,150"/>
+          <path class="scr" stroke="#ffe07a" d="M122,80 C120,102 120,122 126,138 C136,148 150,140 152,122 L154,80 C152,120 150,158 146,178 C140,200 118,198 116,180"/>
+          <path class="scr" stroke="#00b2ff" d="M247,86 C238,70 214,72 212,88 C210,104 240,104 246,120 C252,138 228,150 214,138"/>
+          <path class="scr" stroke="#b48aff" d="M292,48 C290,80 288,115 290,132 C292,144 304,146 312,136 M272,82 L314,80"/>
+          <path class="scr" stroke="#2ee6a8" d="M362,78 C344,82 338,104 346,120 C354,136 378,138 388,124 C398,108 392,84 374,78 C370,77 366,77 362,78"/>
+          <path class="scr" stroke="#ff8a5c" d="M424,78 C422,100 422,120 424,140 M424,104 C428,88 442,74 458,78"/>
+          <path class="scr" stroke="#7ad7ff" d="M488,80 C486,102 486,122 492,138 C502,148 516,140 518,122 L520,80 C518,120 516,158 512,178 C506,200 484,198 482,180"/>
+        </g>
+      </svg>
+    </div>
   </section>
 
   <!-- about -->
-  <section class="about">
+  <section class="about" id="about">
     <textarea id="message" placeholder="Type your message… " aria-label="Type your message"></textarea>
 
     <h1 class="about__title">

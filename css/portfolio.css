@@ -86,71 +86,36 @@ body {
 }
 
 .intro__anim {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 0.06em;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-weight: 500;
-  font-size: clamp(3.4rem, 13vw, 11rem);
-  line-height: 1;
+  width: min(720px, 86vw);
   will-change: opacity, transform;
+  transition: opacity 0.9s var(--mono-ease), transform 0.9s var(--mono-ease);
 }
 
-.intro__char {
-  display: inline-block;
-  animation: charFloat 3.6s ease-in-out infinite;
-  animation-delay: calc(1.2s + var(--i) * 0.15s);
+.intro__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
 }
 
-.intro__char--space {
-  width: 0.6em;
+.intro__svg .scr {
+  fill: none;
+  stroke-width: 13;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  visibility: hidden; /* revealed by JS once dash lengths are measured */
 }
 
-.intro__char__inner {
-  display: inline-block;
-  background-image: var(--char-gradient, linear-gradient(45deg, #fff, #888));
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+.intro--done .intro__anim {
   opacity: 0;
-  transform: translateY(90px) scale(0.55) rotate(6deg);
-  animation: charIn 1.1s var(--mono-ease) forwards;
-  animation-delay: calc(var(--i) * 0.13s + 0.2s);
-}
-
-.intro__char:nth-child(8n + 1) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ff5c8a, #ff9ab8); }
-.intro__char:nth-child(8n + 2) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ffe07a, #f5f06e); }
-.intro__char:nth-child(8n + 3) .intro__char__inner { --char-gradient: linear-gradient(180deg, #00b2ff, #008fff); }
-.intro__char:nth-child(8n + 4) .intro__char__inner { --char-gradient: linear-gradient(180deg, #b48aff, #8a7dff); }
-.intro__char:nth-child(8n + 5) .intro__char__inner { --char-gradient: linear-gradient(180deg, #2ee6a8, #7ad7a0); }
-.intro__char:nth-child(8n + 6) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ff8a5c, #ff5c8a); }
-.intro__char:nth-child(8n + 7) .intro__char__inner { --char-gradient: linear-gradient(180deg, #7ad7ff, #b0c4de); }
-.intro__char:nth-child(8n + 8) .intro__char__inner { --char-gradient: linear-gradient(180deg, #f03f9d, #b48aff); }
-
-@keyframes charIn {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
-}
-
-@keyframes charFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-0.06em);
-  }
+  transform: translateY(-60px) scale(0.92);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro__char,
-  .intro__char__inner {
-    animation: none;
-    opacity: 1;
-    transform: none;
+  .intro__svg .scr {
+    visibility: visible !important;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }
 
