@@ -127,65 +127,116 @@
   }
 
 
-  // intro: the pen-ball writes "abs" over the construction grid,
-  // then settles at the end of the word as the period
+  // intro: the ball is the pen tip. It traces each letter's path while
+  // the stroke draws in white directly beneath it; when a letter
+  // completes it takes its color, and after the final "s" the ball
+  // glides down and lands as the period.
   const introAnim = document.getElementById('introAnim');
   const intro = document.getElementById('intro');
   const introBall = document.getElementById('introBall');
   const reduceMotionIntro = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (intro && introAnim && introBall && !reduceMotionIntro) {
-    let advanced = false;
+  if (intro && introAnim && introBall) {
+    const letters = [...introAnim.querySelectorAll('.intro__letter')].map((el) => ({
+      el,
+      len: el.getTotalLength(),
+      color: el.dataset.color
+    }));
+    const PERIOD = { x: 560, y: 236 };
 
-    const advance = () => {
-      if (advanced) return;
-      advanced = true;
-      intro.classList.add('intro--done');
-      setTimeout(() => {
-        document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-      }, 700);
-      // once we've moved on, bring the word back so scrolling
-      // up doesn't land on an empty screen
-      setTimeout(() => intro.classList.remove('intro--done'), 2800);
-    };
+    if (reduceMotionIntro) {
+      // show the finished word, no motion, no auto-scroll
+      letters.forEach((l) => { l.el.style.stroke = l.color; });
+    } else {
+      let advanced = false;
 
-    // waypoints trace the writing: over the a, down its stem, up the b
-    // ascender, over the bowl, across the s, land as the period.
-    // Offsets line up with the letter reveal delays in the CSS
-    // (a at 0.70s, b at 1.85s, s at 2.70s on a 300ms + 3000ms timeline).
-    const BALL_DELAY = 300;
-    const BALL_MS = 3000;
-    const waypoints = [
-      { x: 80,  y: 30,  o: 0.00 },
-      { x: 150, y: 85,  o: 0.13 },
-      { x: 206, y: 200, o: 0.30 },
-      { x: 238, y: 28,  o: 0.45 },
-      { x: 322, y: 85,  o: 0.55 },
-      { x: 390, y: 200, o: 0.70 },
-      { x: 462, y: 95,  o: 0.80 },
-      { x: 450, y: 215, o: 0.90 },
-      { x: 560, y: 236, o: 1.00 }
-    ];
+      const advance = () => {
+        if (advanced) return;
+        advanced = true;
+        intro.classList.add('intro--done');
+        setTimeout(() => {
+          document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        }, 700);
+        // once we've moved on, bring the word back so scrolling
+        // up doesn't land on an empty screen
+        setTimeout(() => intro.classList.remove('intro--done'), 2800);
+      };
 
-    introBall.animate(
-      waypoints.map((w) => ({
-        transform: `translate(${w.x}px, ${w.y}px)`,
-        opacity: w.o === 0 ? 0 : 1,
-        offset: w.o
-      })),
-      { duration: BALL_MS, delay: BALL_DELAY, easing: 'ease-in-out', fill: 'forwards' }
-    );
+      // prep: hide each stroke behind its own dash offset
+      letters.forEach((l) => {
+        l.el.style.strokeDasharray = String(l.len);
+        l.el.style.strokeDashoffset = String(l.len);
+        l.el.style.visibility = 'visible';
+      });
 
-    const totalMs = BALL_DELAY + BALL_MS;
-    const autoTimer = setTimeout(advance, totalMs + 1300);
+      const totalLen = letters.reduce((s, l) => s + l.len, 0);
+      const WRITE_MS = 3400;   // constant pen speed across the whole word
+      const GAP_MS = 160;      // pen lift between letters
+      const LAND_MS = 520;     // hop from the s down to the period
+      const START_MS = 600;    // let the guides fade in first
 
-    // a user gesture skips the wait and hands off immediately
-    ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((evt) => {
-      window.addEventListener(evt, () => {
-        clearTimeout(autoTimer);
-        advance();
-      }, { once: true, passive: true });
-    });
+      const placeBall = (x, y) => {
+        introBall.style.opacity = '1';
+        introBall.style.transform = `translate(${x}px, ${y}px)`;
+      };
+
+      // build the schedule: [start, end] per letter at constant speed
+      let acc = START_MS;
+      letters.forEach((l) => {
+        l.start = acc;
+        l.end = acc + (l.len / totalLen) * WRITE_MS;
+        acc = l.end + GAP_MS;
+      });
+      const writeEnd = letters[letters.length - 1].end;
+      const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+      const t0 = performance.now();
+      const tick = (now) => {
+        if (advanced) return;
+        const t = now - t0;
+
+        letters.forEach((l) => {
+          if (t <= l.start) return;
+          const p = Math.min((t - l.start) / (l.end - l.start), 1);
+          const drawn = l.len * p;
+          l.el.style.strokeDashoffset = String(l.len - drawn);
+          if (p < 1) {
+            const pt = l.el.getPointAtLength(drawn);
+            placeBall(pt.x, pt.y);
+          } else if (!l.colored) {
+            l.colored = true;
+            l.el.style.stroke = l.color; // formed: white becomes the letter's color
+          }
+        });
+
+        if (t >= writeEnd) {
+          // the s just finished: land as the period
+          const from = letters[letters.length - 1].el.getPointAtLength(letters[letters.length - 1].len);
+          const q = Math.min((t - writeEnd) / LAND_MS, 1);
+          const e = easeOut(q);
+          placeBall(from.x + (PERIOD.x - from.x) * e, from.y + (PERIOD.y - from.y) * e);
+          if (q >= 1) {
+            setTimeout(advance, 1300);
+            return; // choreography complete
+          }
+        }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+
+      // a user gesture skips the wait and hands off immediately
+      ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((evt) => {
+        window.addEventListener(evt, () => {
+          // show the finished word before leaving
+          letters.forEach((l) => {
+            l.el.style.strokeDashoffset = '0';
+            l.el.style.stroke = l.color;
+          });
+          placeBall(PERIOD.x, PERIOD.y);
+          advance();
+        }, { once: true, passive: true });
+      });
+    }
   }
 
   // scroll reveal

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>bhavani shankar ajith</title>
+  <title>Bhavani S. &middot; Junior Software Developer</title>
 
   <!-- SEO -->
   <meta name="description" content="hi. i'm bhavani. Software engineer building backend and AI systems that stay correct when conditions are messy. Spring Boot, GraphRAG, Kafka, distributed systems.">
@@ -12,14 +12,14 @@
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="bhavani shankar ajith">
+  <meta property="og:title" content="Bhavani S. &middot; Junior Software Developer">
   <meta property="og:description" content="Software engineer building backend and AI systems that stay correct when conditions are messy.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://abs768.github.io/images/DocGPT.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,23 +48,14 @@
           <circle cx="462" cy="218" r="42"/>
         </g>
 
-        <!-- a: annulus + right stem -->
-        <g class="intro__letter" style="--d: 0.70s">
-          <circle cx="150" cy="180" r="56" fill="none" stroke="#1c86ff" stroke-width="48"/>
-          <rect x="182" y="100" width="48" height="160" rx="24" fill="#1c86ff"/>
-        </g>
-
-        <!-- b: ascender stem + bowl, stem overlapping a's stem -->
-        <g class="intro__letter" style="--d: 1.85s">
-          <rect x="214" y="42" width="48" height="218" rx="24" fill="#ff4fa0"/>
-          <circle cx="322" cy="180" r="56" fill="none" stroke="#ff4fa0" stroke-width="48"/>
-        </g>
-
-        <!-- s: two interlocking arcs, tucked against b's bowl -->
-        <g class="intro__letter" style="--d: 2.70s">
-          <path d="M498,118 C490,94 434,96 432,132 C430,166 496,158 496,196 C496,232 432,236 424,210"
-                fill="none" stroke="#ff4757" stroke-width="46" stroke-linecap="round"/>
-        </g>
+        <!-- each letter is one pen path: drawn white under the ball,
+             colorized the moment it completes -->
+        <path class="intro__letter" data-color="#1c86ff"
+              d="M206,180 A56,56 0 1 1 150,124 A56,56 0 0 1 206,180 M206,100 L206,260"/>
+        <path class="intro__letter" data-color="#ff4fa0"
+              d="M238,42 L238,260 M238,180 A56,56 0 1 1 322,236 A56,56 0 0 1 266,180"/>
+        <path class="intro__letter" data-color="#ff4757"
+              d="M498,118 C490,94 434,96 432,132 C430,166 496,158 496,196 C496,232 432,236 424,210"/>
 
         <!-- the pen: writes the word, lands as the period -->
         <circle class="intro__ball" id="introBall" cx="0" cy="0" r="26" fill="#ffffff"/>
