@@ -68,6 +68,92 @@ body {
   }
 }
 
+/* ============ intro animation ============ */
+.intro {
+  max-width: none;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.intro::before {
+  display: none;
+}
+
+.intro__anim {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 0.06em;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-weight: 500;
+  font-size: clamp(3.4rem, 13vw, 11rem);
+  line-height: 1;
+  will-change: opacity, transform;
+}
+
+.intro__char {
+  display: inline-block;
+  animation: charFloat 3.6s ease-in-out infinite;
+  animation-delay: calc(1.2s + var(--i) * 0.15s);
+}
+
+.intro__char--space {
+  width: 0.6em;
+}
+
+.intro__char__inner {
+  display: inline-block;
+  background-image: var(--char-gradient, linear-gradient(45deg, #fff, #888));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  transform: translateY(90px) scale(0.55) rotate(6deg);
+  animation: charIn 1.1s var(--mono-ease) forwards;
+  animation-delay: calc(var(--i) * 0.13s + 0.2s);
+}
+
+.intro__char:nth-child(8n + 1) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ff5c8a, #ff9ab8); }
+.intro__char:nth-child(8n + 2) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ffe07a, #f5f06e); }
+.intro__char:nth-child(8n + 3) .intro__char__inner { --char-gradient: linear-gradient(180deg, #00b2ff, #008fff); }
+.intro__char:nth-child(8n + 4) .intro__char__inner { --char-gradient: linear-gradient(180deg, #b48aff, #8a7dff); }
+.intro__char:nth-child(8n + 5) .intro__char__inner { --char-gradient: linear-gradient(180deg, #2ee6a8, #7ad7a0); }
+.intro__char:nth-child(8n + 6) .intro__char__inner { --char-gradient: linear-gradient(180deg, #ff8a5c, #ff5c8a); }
+.intro__char:nth-child(8n + 7) .intro__char__inner { --char-gradient: linear-gradient(180deg, #7ad7ff, #b0c4de); }
+.intro__char:nth-child(8n + 8) .intro__char__inner { --char-gradient: linear-gradient(180deg, #f03f9d, #b48aff); }
+
+@keyframes charIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes charFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.06em);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__char,
+  .intro__char__inner {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* sections: centered content column with faint vertical grid lines */
 section {
   max-width: 46rem;

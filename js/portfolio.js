@@ -77,6 +77,36 @@
     });
   }
 
+
+  // intro: build "my story" letterforms and fade the section on scroll
+  const introAnim = document.getElementById('introAnim');
+  const intro = document.getElementById('intro');
+
+  if (introAnim) {
+    const text = 'my story';
+    [...text].forEach((ch, i) => {
+      const outer = document.createElement('span');
+      outer.className = 'intro__char' + (ch === ' ' ? ' intro__char--space' : '');
+      outer.style.setProperty('--i', i);
+      if (ch !== ' ') {
+        const inner = document.createElement('span');
+        inner.className = 'intro__char__inner';
+        inner.style.setProperty('--i', i);
+        inner.textContent = ch;
+        outer.appendChild(inner);
+      }
+      introAnim.appendChild(outer);
+    });
+  }
+
+  if (intro && introAnim) {
+    window.addEventListener('scroll', () => {
+      const progress = Math.min(window.scrollY / (window.innerHeight * 0.8), 1);
+      introAnim.style.opacity = String(1 - progress);
+      introAnim.style.transform = `translateY(${progress * -60}px) scale(${1 - progress * 0.1})`;
+    }, { passive: true });
+  }
+
   // scroll reveal
   const targets = document.querySelectorAll('section, .workgrid__item');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
