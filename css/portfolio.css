@@ -94,21 +94,32 @@ body {
   overflow: visible;
 }
 
-.intro__letter {
+.intro__guides {
   fill: none;
-  stroke-width: 28;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 1;
+  opacity: 0;
+  animation: guidesIn 0.9s ease 0.15s forwards;
+}
+
+@keyframes guidesIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.intro__letter {
+  mix-blend-mode: screen; /* overlapping letters glow lighter, flat color elsewhere */
   transform-box: fill-box;
   transform-origin: 50% 100%;
   opacity: 0;
-  transform: translateY(70px) scale(0.3);
-  animation: letterPop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  animation-delay: calc(var(--i) * 0.14s + 0.25s);
+  transform: translateY(26px) scale(0.85);
+  animation: letterPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation-delay: var(--d);
 }
 
 @keyframes letterPop {
-  55% {
+  45% {
     opacity: 1;
   }
   to {
@@ -117,16 +128,25 @@ body {
   }
 }
 
+.intro__ball {
+  opacity: 0; /* revealed when the JS choreography starts */
+}
+
 .intro--done .intro__anim {
   opacity: 0;
   transform: translateY(-60px) scale(0.92);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .intro__guides,
   .intro__letter {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+  .intro__ball {
+    opacity: 1;
+    transform: translate(560px, 236px);
   }
 }
 

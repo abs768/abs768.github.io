@@ -127,14 +127,14 @@
   }
 
 
-  // intro: "my story" in chunky rounded letterforms that pop in,
-  // then hand off to the greeting
+  // intro: the pen-ball writes "abs" over the construction grid,
+  // then settles at the end of the word as the period
   const introAnim = document.getElementById('introAnim');
   const intro = document.getElementById('intro');
+  const introBall = document.getElementById('introBall');
   const reduceMotionIntro = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (intro && introAnim && !reduceMotionIntro) {
-    const letterCount = introAnim.querySelectorAll('.intro__letter').length;
+  if (intro && introAnim && introBall && !reduceMotionIntro) {
     let advanced = false;
 
     const advance = () => {
@@ -149,8 +149,34 @@
       setTimeout(() => intro.classList.remove('intro--done'), 2800);
     };
 
-    // matches the CSS: 0.25s lead-in, 0.14s stagger, 0.85s pop
-    const totalMs = 250 + (letterCount - 1) * 140 + 850;
+    // waypoints trace the writing: over the a, down its stem, up the b
+    // ascender, over the bowl, across the s, land as the period.
+    // Offsets line up with the letter reveal delays in the CSS
+    // (a at 0.70s, b at 1.85s, s at 2.70s on a 300ms + 3000ms timeline).
+    const BALL_DELAY = 300;
+    const BALL_MS = 3000;
+    const waypoints = [
+      { x: 80,  y: 30,  o: 0.00 },
+      { x: 150, y: 85,  o: 0.13 },
+      { x: 206, y: 200, o: 0.30 },
+      { x: 238, y: 28,  o: 0.45 },
+      { x: 322, y: 85,  o: 0.55 },
+      { x: 390, y: 200, o: 0.70 },
+      { x: 462, y: 95,  o: 0.80 },
+      { x: 450, y: 215, o: 0.90 },
+      { x: 560, y: 236, o: 1.00 }
+    ];
+
+    introBall.animate(
+      waypoints.map((w) => ({
+        transform: `translate(${w.x}px, ${w.y}px)`,
+        opacity: w.o === 0 ? 0 : 1,
+        offset: w.o
+      })),
+      { duration: BALL_MS, delay: BALL_DELAY, easing: 'ease-in-out', fill: 'forwards' }
+    );
+
+    const totalMs = BALL_DELAY + BALL_MS;
     const autoTimer = setTimeout(advance, totalMs + 1300);
 
     // a user gesture skips the wait and hands off immediately

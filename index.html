@@ -37,23 +37,37 @@
   <!-- intro animation: "my story", hand-scribbled stroke by stroke -->
   <section class="intro" id="intro" aria-label="my story">
     <div class="intro__anim" id="introAnim" aria-hidden="true">
-      <svg class="intro__svg" viewBox="0 0 580 250" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5c8a"/><stop offset="1" stop-color="#ff9ab8"/></linearGradient>
-          <linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe07a"/><stop offset="1" stop-color="#ffb45c"/></linearGradient>
-          <linearGradient id="lg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#008fff"/></linearGradient>
-          <linearGradient id="lg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b48aff"/><stop offset="1" stop-color="#7d5cff"/></linearGradient>
-          <linearGradient id="lg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ee6a8"/><stop offset="1" stop-color="#9be15d"/></linearGradient>
-          <linearGradient id="lg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff8a5c"/><stop offset="1" stop-color="#ff5c8a"/></linearGradient>
-          <linearGradient id="lg7" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7ad7ff"/><stop offset="1" stop-color="#b48aff"/></linearGradient>
-        </defs>
-        <path class="intro__letter" style="--i:0" stroke="url(#lg1)" d="M40,170 L40,112 C40,84 72,84 72,112 L72,170 M72,112 C72,84 104,84 104,112 L104,170"/>
-        <path class="intro__letter" style="--i:1" stroke="url(#lg2)" d="M136,100 L136,140 C136,163 170,163 170,140 L170,100 M170,140 L170,192 C170,216 142,218 134,202"/>
-        <path class="intro__letter" style="--i:2" stroke="url(#lg3)" d="M258,104 C250,92 224,92 224,110 C224,126 258,124 258,142 C258,160 230,160 222,148"/>
-        <path class="intro__letter" style="--i:3" stroke="url(#lg4)" d="M298,68 L298,148 C298,166 318,168 326,158 M280,104 L320,104"/>
-        <circle class="intro__letter" style="--i:4" stroke="url(#lg5)" cx="374" cy="134" r="35" fill="none"/>
-        <path class="intro__letter" style="--i:5" stroke="url(#lg6)" d="M436,100 L436,170 M436,130 C436,106 464,98 472,106"/>
-        <path class="intro__letter" style="--i:6" stroke="url(#lg7)" d="M504,100 L504,140 C504,163 538,163 538,140 L538,100 M538,140 L538,192 C538,216 510,218 502,202"/>
+      <svg class="intro__svg" viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg">
+        <!-- construction guides, like a type-design blueprint -->
+        <g class="intro__guides">
+          <path d="M60,100 L590,100 M60,260 L590,260 M60,180 L590,180"/>
+          <path d="M104,70 L104,290 M242,70 L242,290 M386,70 L386,290 M516,70 L516,290"/>
+          <circle cx="150" cy="180" r="80"/>
+          <circle cx="322" cy="180" r="80"/>
+          <circle cx="462" cy="142" r="42"/>
+          <circle cx="462" cy="218" r="42"/>
+        </g>
+
+        <!-- a: annulus + right stem -->
+        <g class="intro__letter" style="--d: 0.70s">
+          <circle cx="150" cy="180" r="56" fill="none" stroke="#1c86ff" stroke-width="48"/>
+          <rect x="182" y="100" width="48" height="160" rx="24" fill="#1c86ff"/>
+        </g>
+
+        <!-- b: ascender stem + bowl, stem overlapping a's stem -->
+        <g class="intro__letter" style="--d: 1.85s">
+          <rect x="214" y="42" width="48" height="218" rx="24" fill="#ff4fa0"/>
+          <circle cx="322" cy="180" r="56" fill="none" stroke="#ff4fa0" stroke-width="48"/>
+        </g>
+
+        <!-- s: two interlocking arcs, tucked against b's bowl -->
+        <g class="intro__letter" style="--d: 2.70s">
+          <path d="M498,118 C490,94 434,96 432,132 C430,166 496,158 496,196 C496,232 432,236 424,210"
+                fill="none" stroke="#ff4757" stroke-width="46" stroke-linecap="round"/>
+        </g>
+
+        <!-- the pen: writes the word, lands as the period -->
+        <circle class="intro__ball" id="introBall" cx="0" cy="0" r="26" fill="#ffffff"/>
       </svg>
     </div>
   </section>
