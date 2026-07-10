@@ -668,11 +668,11 @@ a:hover {
 
 .tile {
   background: var(--mono-tile);
-  border-radius: 4px;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .tile--4to3 {
@@ -680,8 +680,8 @@ a:hover {
 }
 
 .tile svg {
-  width: 42%;
-  max-width: 84px;
+  width: 34%;
+  max-width: 72px;
 }
 
 .words__samples__item a:hover .tile,
@@ -795,32 +795,33 @@ a:hover {
 /* ============ speak-style work list ============ */
 .engagement-list {
   list-style: none;
-  margin: 0;
+  margin: 3em 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.6em 2em;
+  gap: 1em 2.5em;
 }
 
 .engagement-list__item a {
   display: flex;
-  gap: 1.2em;
+  gap: 1.3em;
   align-items: flex-start;
 }
 
 .engagement-list__item .tile {
-  flex: 0 0 34%;
-  max-width: 136px;
+  flex: 0 0 38%;
+  max-width: 180px;
 }
 
 .engagement-list__text h2 {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  margin-top: 0.15em;
 }
 
 .engagement-list__text p {
   margin: 0;
   color: var(--mono-gray);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 /* ============ footer ============ */
