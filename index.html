@@ -118,12 +118,16 @@
       </a>
     </div>
 
-    <!-- 3: sub-100ms -->
+    <!-- 3: type-spec style measurement -->
     <div class="workgrid__item workgrid__item--3">
       <div class="workgrid__item__container">
         <div class="workgrid__item__title">edge inference on nvidia jetson</div>
         <div class="workgrid__item__content">
-          <span class="tile-stat tile-stat--ms">&lt;100ms</span>
+          <div class="tile-spec">
+            <span class="tile-spec__guide" aria-hidden="true"></span>
+            <span class="tile-spec__num">&lt;100<small>ms</small></span>
+            <span class="tile-spec__guide" aria-hidden="true"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -138,23 +142,36 @@
       </div>
     </div>
 
-    <!-- 5: knowledge graph (tall) -->
+    <!-- 5: case-wiki knowledge graph, obsidian-style (tall) -->
     <div class="workgrid__item workgrid__item--5">
       <a href="https://github.com/abs768/forensic-llm-wiki-obsidian" target="_blank" rel="noopener noreferrer">
         <div class="workgrid__item__container">
           <div class="workgrid__item__title">forensic llm wiki &mdash; evidence graphs from case notes</div>
           <div class="workgrid__item__content workgrid__item__content--center">
-            <svg class="tile-graph" viewBox="0 0 200 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <g stroke="#3a3a48" stroke-width="1.5" fill="none">
-                <path d="M50 60 L120 110 M120 110 L70 180 M120 110 L160 200 M70 180 L110 260 M160 200 L110 260 M50 60 L40 150 M40 150 L70 180"/>
+            <svg class="tile-nodegraph" viewBox="0 0 220 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g stroke="#6f5cf0" stroke-width="0.8" opacity="0.45" fill="none">
+                <path d="M100,210 L48,86 M100,210 L96,58 M100,210 L142,62 M100,210 L172,116 M100,210 L182,180 M100,210 L146,246 M100,210 L118,318 M100,210 L84,136 M142,62 L172,116 M142,62 L96,58 M172,116 L182,180"/>
               </g>
-              <g fill="#008fff">
-                <circle cx="50" cy="60" r="7"/>
-                <circle cx="120" cy="110" r="10"/>
-                <circle cx="70" cy="180" r="7"/>
-                <circle cx="160" cy="200" r="6"/>
-                <circle cx="110" cy="260" r="8"/>
-                <circle cx="40" cy="150" r="5"/>
+              <g fill="#8f949c">
+                <circle cx="48" cy="86" r="4"/>
+                <circle cx="96" cy="58" r="4"/>
+                <circle cx="142" cy="62" r="4"/>
+                <circle cx="172" cy="116" r="4"/>
+                <circle cx="182" cy="180" r="4"/>
+                <circle cx="146" cy="246" r="4"/>
+                <circle cx="118" cy="318" r="4"/>
+                <circle cx="84" cy="136" r="3.4" opacity="0.55"/>
+              </g>
+              <circle cx="100" cy="210" r="6.5" fill="#8a63f5"/>
+              <g class="tile-nodegraph__labels" text-anchor="middle">
+                <text x="48" y="102">final_report</text>
+                <text x="96" y="46">contradictions</text>
+                <text x="142" y="50">iocs</text>
+                <text x="172" y="132">hypotheses</text>
+                <text x="182" y="196">entities</text>
+                <text x="146" y="262">timeline</text>
+                <text x="118" y="334">open_questions</text>
+                <text x="100" y="228">index</text>
               </g>
             </svg>
           </div>
@@ -162,11 +179,47 @@
       </a>
     </div>
 
-    <!-- 6: aurora gradient (tall, decorative) -->
+    <!-- 6: architecture flowchart, blueprint-style (tall) -->
     <div class="workgrid__item workgrid__item--6">
-      <div class="workgrid__item__container">
-        <div class="workgrid__item__content workgrid__item__content--aurora"></div>
-      </div>
+      <a href="https://github.com/abs768/PaperTrail#readme" target="_blank" rel="noopener noreferrer">
+        <div class="workgrid__item__container">
+          <div class="workgrid__item__title">how papertrail works</div>
+          <div class="workgrid__item__content workgrid__item__content--center">
+            <svg class="tile-flow" viewBox="0 0 220 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g class="tile-flow__boxes">
+                <rect x="24" y="24" width="80" height="30"/>
+                <rect x="118" y="24" width="80" height="30"/>
+                <rect x="72" y="92" width="76" height="28"/>
+                <rect x="36" y="158" width="148" height="44"/>
+                <rect x="20" y="248" width="52" height="28"/>
+                <rect x="84" y="248" width="52" height="28"/>
+                <rect x="148" y="248" width="52" height="28"/>
+                <rect x="58" y="312" width="104" height="28"/>
+              </g>
+              <g class="tile-flow__arrows">
+                <path d="M64,54 C64,72 96,74 102,92"/>
+                <path d="M158,54 C158,72 124,74 118,92"/>
+                <path d="M110,120 L110,158"/>
+                <path d="M62,202 C52,218 46,232 46,248"/>
+                <path d="M110,202 L110,248"/>
+                <path d="M158,202 C168,218 174,232 174,248"/>
+                <path d="M110,276 L110,312"/>
+              </g>
+              <g class="tile-flow__labels" text-anchor="middle">
+                <text x="64" y="42">sources</text>
+                <text x="158" y="42">schema</text>
+                <text x="110" y="109">ingest</text>
+                <text x="110" y="176">knowledge graph</text>
+                <text x="110" y="190" opacity="0.55">entities &middot; citations</text>
+                <text x="46" y="265">query</text>
+                <text x="110" y="265">lint</text>
+                <text x="174" y="265">report</text>
+                <text x="110" y="329">grounded answer</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </a>
     </div>
 
     <!-- 7: 99.61% publication -->
@@ -193,12 +246,17 @@
       </a>
     </div>
 
-    <!-- 9: mcp -->
+    <!-- 9: assistant strip -->
     <div class="workgrid__item workgrid__item--9">
       <div class="workgrid__item__container">
-        <div class="workgrid__item__title">13 tools over model context protocol</div>
+        <div class="workgrid__item__title">docgpt &mdash; local llms, private by default</div>
         <div class="workgrid__item__content">
-          <span class="tile-wordmark tile-wordmark--mcp">MCP</span>
+          <div class="tile-assist">
+            <p>ask your papers anything</p>
+            <div class="tile-assist__bar" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
