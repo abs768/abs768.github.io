@@ -1359,3 +1359,8 @@ a:hover {
     stroke-dashoffset: 0;
   }
 }
+
+/* restore the intro word without a visible transition */
+.intro__anim--notrans {
+  transition: none !important;
+}

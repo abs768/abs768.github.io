@@ -196,9 +196,17 @@
         setTimeout(() => {
           document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
         }, 700);
-        // once we've moved on, bring the word back so scrolling
-        // up doesn't land on an empty screen
-        setTimeout(() => intro.classList.remove('intro--done'), 2800);
+        // once we've scrolled away, quietly restore the finished word —
+        // transitions off for a frame so there's no visible pop, and
+        // scrolling back to the top shows it sitting there, complete
+        setTimeout(() => {
+          const anim = intro.querySelector('.intro__anim');
+          anim.classList.add('intro__anim--notrans');
+          intro.classList.remove('intro--done');
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => anim.classList.remove('intro__anim--notrans'));
+          });
+        }, 2200);
       };
 
       // prep: hide each stroke behind its own dash offset
