@@ -1517,8 +1517,35 @@ a:hover {
   }
 }
 
+/* the composed screen: artwork behind, conversation in front */
+.screencontent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  transform-origin: 50% 50%;
+}
+
+.screencontent .chatdemo {
+  position: relative;
+  z-index: 1;
+}
+
+.screencontent .chatdemo__bubble {
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.65);
+}
+
+.screencontent .chatdemo__bubble--a {
+  background: rgba(16, 16, 21, 0.88);
+  backdrop-filter: blur(6px);
+}
+
 /* the flashy screen: layered iridescent gradients, drifting hue */
 .screenart {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   background:

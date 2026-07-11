@@ -241,12 +241,23 @@
 
     <div class="device" id="docDevice">
       <div class="device__screen" id="screenZoom">
-        <div class="screenart" id="screenArt" aria-hidden="true"></div>
+        <div class="screencontent" id="screenContent">
+          <div class="screenart" aria-hidden="true"></div>
+          <div class="chatdemo">
+            <div class="chatdemo__bubble chatdemo__bubble--q">
+              <span id="chatQ"></span><span class="chatdemo__caret" aria-hidden="true"></span>
+            </div>
+            <div class="chatdemo__bubble chatdemo__bubble--a" id="chatA">
+              <p id="chatAText"></p>
+              <div class="chatdemo__cites" id="chatCites"></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="device__stand" aria-hidden="true"></div>
       <div class="device__foot" aria-hidden="true"></div>
     </div>
-    <p class="card-hint">scroll inside the screen &mdash; it zooms slowly, like leaning into a photo</p>
+    <p class="card-hint">a private conversation over living color &mdash; scroll inside the screen to lean in, slowly</p>
 
     <div class="xp-diagram">
       <svg class="diag" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" aria-label="DocGPT architecture">
