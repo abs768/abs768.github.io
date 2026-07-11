@@ -125,7 +125,8 @@
     send.addEventListener('click', (e) => {
       e.preventDefault();
       const addr = senderEmail ? senderEmail.value.trim() : '';
-      if (senderEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) {
+      // sharing an email is optional — only a malformed one blocks
+      if (addr && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) {
         senderEmail.classList.add('is-error');
         senderEmail.focus();
         return;
@@ -134,7 +135,7 @@
       const body = message.value.trim() + (addr ? `\n\n— ${addr}` : '');
       window.location.href =
         `mailto:${EMAIL}?subject=${encodeURIComponent('hi bhavani')}&body=${encodeURIComponent(body)}`;
-      if (thanksName) thanksName.textContent = firstNameFrom(addr);
+      if (thanksName) thanksName.textContent = addr ? ' ' + firstNameFrom(addr) : '';
       document.body.classList.remove('is-writing');
       document.body.classList.add('is-sent');
     });
@@ -431,6 +432,13 @@
       }
     };
     setTimeout(erase, 3200);
+  }
+
+  // a real buzz on devices that can do it
+  if ('vibrate' in navigator) {
+    document.querySelectorAll('.tile, .workgrid__item, .btn').forEach((el) => {
+      el.addEventListener('touchstart', () => navigator.vibrate(8), { passive: true });
+    });
   }
 
   // scroll reveal

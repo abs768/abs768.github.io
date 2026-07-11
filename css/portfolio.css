@@ -161,7 +161,7 @@ section {
 section::before {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 0 1rem;
   background-image: repeating-linear-gradient(
     90deg,
     transparent 0,
@@ -664,8 +664,12 @@ a:hover {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.9em;
+  grid-template-columns: repeat(3, 1fr); /* thirds = every 2nd background column */
+  gap: 0;
+}
+
+.words__samples__item {
+  padding-right: 0.9em;
 }
 
 .words__samples__item a {
@@ -690,9 +694,23 @@ a:hover {
   max-width: 72px;
 }
 
+.tile {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease-in-out,
+              box-shadow 0.3s ease;
+}
+
 .words__samples__item a:hover .tile,
 .engagement-list__item a:hover .tile {
-  background-color: #000;
+  background-color: #17171e;
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 14px 34px -18px rgba(0, 143, 255, 0.45);
+}
+
+.words__samples__item a:active .tile,
+.engagement-list__item a:active .tile {
+  transform: translateY(-2px) scale(0.99); /* press-in on click */
+  transition-duration: 0.1s;
 }
 
 .words__samples__item p {
@@ -809,18 +827,24 @@ a:hover {
   padding: 0;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2.4em 3em;
+  gap: 2.4em 0; /* items span 3 background columns each */
 }
 
 .engagement-list__item a {
   display: flex;
-  gap: 2em;
+  gap: 0;
   align-items: flex-start;
 }
 
 .engagement-list__item .tile {
-  flex: 0 0 30%;
-  max-width: 190px;
+  flex: 0 0 33.3333%; /* exactly one background column */
+  max-width: none;
+}
+
+.engagement-list__text {
+  padding-left: 1.6em;
+  padding-right: 1.6em;
+  flex: 1;
 }
 
 .engagement-list__text h2 {
@@ -1443,5 +1467,52 @@ a:hover {
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* ============ lab spec cards ============ */
+.spec-row {
+  display: flex;
+  gap: 0.9em;
+  align-items: stretch;
+  margin-top: 2.4em;
+  max-width: 640px;
+  min-height: 250px;
+}
+
+.spec-card {
+  flex: 1 1 auto;
+  color: #1a1a1a;
+  border-radius: 2px;
+  padding: 1.1em 1.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.spec-card h4 {
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.spec-card p {
+  margin: 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 0.68rem;
+  line-height: 1.8;
+  color: #3a3a3a;
+}
+
+.spec-strip {
+  width: 54px;
+  border-radius: 2px;
+}
+
+@media (max-width: 47.99em) {
+  .spec-strip {
+    width: 28px;
   }
 }
