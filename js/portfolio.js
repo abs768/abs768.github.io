@@ -176,7 +176,17 @@
   const introBall = document.getElementById('introBall');
   const reduceMotionIntro = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  if (intro && introAnim && introBall) {
+  let skipIntro = false;
+  try {
+    skipIntro = sessionStorage.getItem('introPlayed') === '1';
+  } catch (e) { /* private mode */ }
+  if (!skipIntro && document.referrer.indexOf(location.origin) === 0) {
+    skipIntro = true; // came from another page of this site
+  }
+
+  if (intro && skipIntro) {
+    intro.style.display = 'none'; // straight to the greeting
+  } else if (intro && introAnim && introBall) {
     const letters = [...introAnim.querySelectorAll('.intro__letter')].map((el) => ({
       el,
       len: el.getTotalLength(),
@@ -193,6 +203,7 @@
       const advance = () => {
         if (advanced) return;
         advanced = true;
+        try { sessionStorage.setItem('introPlayed', '1'); } catch (e) {}
         intro.classList.add('intro--done');
         // once the word has faded, remove the intro entirely — the
         // greeting becomes the top of the page
@@ -472,6 +483,21 @@
   if ('vibrate' in navigator) {
     document.querySelectorAll('.tile, .workgrid__item, .btn').forEach((el) => {
       el.addEventListener('touchstart', () => navigator.vibrate(8), { passive: true });
+    });
+  }
+
+  // the blue load streak: sweeps on arrival, and again when you
+  // navigate within the site
+  const loadbar = document.getElementById('loadbar');
+  if (loadbar) {
+    const sweep = () => {
+      loadbar.classList.remove('is-loading');
+      void loadbar.offsetWidth; // restart the animation
+      loadbar.classList.add('is-loading');
+    };
+    sweep();
+    document.querySelectorAll('a[href*=".html"], a[href="./"]').forEach((a) => {
+      a.addEventListener('click', sweep);
     });
   }
 

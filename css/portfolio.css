@@ -941,6 +941,13 @@ a:hover {
   margin: 0 auto;
   padding: 1.4em 1rem 0;
   font-size: 0.95rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.xp-nav__name {
+  color: #fff;
 }
 
 .xp-nav a {
@@ -1574,5 +1581,38 @@ a:hover {
 @media (prefers-reduced-motion: reduce) {
   .screenart {
     animation: none;
+  }
+}
+
+/* ============ blue load streak ============ */
+.loadbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--mono-blue);
+  box-shadow: 0 0 14px 1px rgba(0, 143, 255, 0.85);
+  z-index: 99998;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loadbar.is-loading {
+  animation: loadSweep 1.1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes loadSweep {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+  60% {
+    width: 72%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
   }
 }
