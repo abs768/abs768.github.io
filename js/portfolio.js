@@ -136,9 +136,6 @@
 
     send.addEventListener('click', (e) => {
       e.preventDefault();
-      const body = message.value.trim();
-      window.location.href =
-        `mailto:${EMAIL}?subject=${encodeURIComponent('hi bhavani')}&body=${encodeURIComponent(body)}`;
       document.body.classList.remove('is-writing');
       document.body.classList.add('is-sent');
       message.blur();
