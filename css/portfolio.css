@@ -1320,3 +1320,42 @@ a:hover {
     transform: translateY(0);
   }
 }
+
+/* ============ workgrid art tiles ============ */
+.tile-art {
+  height: 72%;
+  max-height: 240px;
+  width: auto;
+}
+
+.tile-art--chart {
+  height: 82%;
+  width: 90%;
+  max-height: none;
+}
+
+/* the tick line draws itself, holds, and redraws */
+.tile-chart__line {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: chartDraw 7s ease-in-out infinite;
+}
+
+@keyframes chartDraw {
+  0% { stroke-dashoffset: 100; }
+  35% { stroke-dashoffset: 0; }
+  90% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; }
+}
+
+/* lab anchors land with breathing room */
+.xp[id] {
+  scroll-margin-top: 1.5em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-chart__line {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
