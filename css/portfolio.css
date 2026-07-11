@@ -55,6 +55,12 @@ body {
     top: 0;
     left: -1000px;
     transform: translate(-50%, -50%);
+    transition: background 0.2s ease;
+  }
+
+  /* text caret turns blue over copy, like a live insertion point */
+  #cursor.is-caret {
+    background: var(--mono-blue);
   }
 }
 
@@ -1232,5 +1238,85 @@ a:hover {
   .chatdemo__bubble--a {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* ============ say hi: email + thank-you state ============ */
+.about__email {
+  opacity: 0;
+  pointer-events: none;
+  width: min(24em, 100%);
+  color: #fff;
+  background: none;
+  border: none;
+  border-bottom: 1.5px solid #2a2a33;
+  outline: none;
+  padding: 0.5em 0;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 1em;
+  transform: translateY(44px);
+  transition: all 0.8s var(--mono-ease), border-color 0.2s ease;
+  margin-bottom: 1em;
+}
+
+.about__email:focus {
+  border-bottom-color: var(--mono-blue);
+}
+
+.about__email.is-error {
+  border-bottom-color: #ff4757;
+}
+
+.is-writing .about__email {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.is-sent .about__email,
+.is-sent #message,
+.is-sent .about__buttons,
+.is-sent .about__title,
+.is-sent .about__introText {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* thank-you replaces the greeting in place */
+.is-sent .about__title,
+.is-sent .about__introText {
+  position: absolute;
+  visibility: hidden;
+}
+
+.about__thanks {
+  display: none;
+}
+
+.is-sent .about__thanks {
+  display: block;
+  animation: thanksIn 0.8s var(--mono-ease);
+}
+
+.about__thanks__title {
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 3.2em;
+  font-weight: 400;
+  line-height: 1.15em;
+  margin: 0 0 0.4em;
+}
+
+.about__thanks .btn {
+  margin-top: 1.6em;
+}
+
+@keyframes thanksIn {
+  from {
+    opacity: 0;
+    transform: translateY(44px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

@@ -44,6 +44,7 @@
       let th = 36;
       let tr = 18;
 
+      let caretMode = false;
       if (boxEl && boxEl.isConnected) {
         const r = boxEl.getBoundingClientRect();
         tx = r.left + r.width / 2;
@@ -56,7 +57,9 @@
         tw = 3.5;
         th = parseFloat(getComputedStyle(caretEl).fontSize) * 1.4;
         tr = 2;
+        caretMode = true;
       }
+      cursor.classList.toggle('is-caret', caretMode);
 
       const t = 0.24;
       cur.x = lerp(cur.x, tx, t);
@@ -106,12 +109,48 @@
       }
     });
 
+    const senderEmail = document.getElementById('senderEmail');
+    const thanksName = document.getElementById('thanksName');
+    const thanksBack = document.getElementById('thanksBack');
+
+    // "zurich@gmail.com" -> "Zurich", "tushar.panthri@x.com" -> "Tushar"
+    const firstNameFrom = (addr) => {
+      const token = (addr.split('@')[0] || '')
+        .replace(/[0-9]+/g, ' ')
+        .split(/[._\-+ ]+/)
+        .filter(Boolean)[0] || '';
+      return token ? token[0].toUpperCase() + token.slice(1) : 'friend';
+    };
+
     send.addEventListener('click', (e) => {
       e.preventDefault();
-      const body = message.value.trim();
+      const addr = senderEmail ? senderEmail.value.trim() : '';
+      if (senderEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) {
+        senderEmail.classList.add('is-error');
+        senderEmail.focus();
+        return;
+      }
+      if (senderEmail) senderEmail.classList.remove('is-error');
+      const body = message.value.trim() + (addr ? `\n\n— ${addr}` : '');
       window.location.href =
         `mailto:${EMAIL}?subject=${encodeURIComponent('hi bhavani')}&body=${encodeURIComponent(body)}`;
+      if (thanksName) thanksName.textContent = firstNameFrom(addr);
+      document.body.classList.remove('is-writing');
+      document.body.classList.add('is-sent');
     });
+
+    if (senderEmail) {
+      senderEmail.addEventListener('input', () => senderEmail.classList.remove('is-error'));
+    }
+
+    if (thanksBack) {
+      thanksBack.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.remove('is-sent');
+        message.value = '';
+        if (senderEmail) senderEmail.value = '';
+      });
+    }
   }
 
   // write drawer
