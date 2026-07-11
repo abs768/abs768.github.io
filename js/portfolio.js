@@ -1,3 +1,4 @@
+/* (c) 2026 Bhavani Shankar Ajith. All rights reserved. See /LICENSE. */
 /*
   Portfolio interactions
   - Custom cursor (orb, grows over links)
