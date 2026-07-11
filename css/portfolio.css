@@ -170,10 +170,10 @@ section::before {
     rgba(255, 255, 255, 0.035) 0,
     rgba(255, 255, 255, 0.035) 1px,
     transparent 1px,
-    transparent 13px,
-    rgba(255, 255, 255, 0.035) 13px,
-    rgba(255, 255, 255, 0.035) 14px,
-    transparent 14px,
+    transparent 9px,
+    rgba(255, 255, 255, 0.035) 9px,
+    rgba(255, 255, 255, 0.035) 10px,
+    transparent 10px,
     transparent 16.6666%
   );
   pointer-events: none;
@@ -726,7 +726,7 @@ a:hover {
 }
 
 .words__samples__item {
-  padding: 0 0.95em; /* the box floats between its boundary lines */
+  padding: 0 0.45em; /* the box fills its columns, lines just visible */
 }
 
 .words__samples__item a {
@@ -894,10 +894,10 @@ a:hover {
 }
 
 .engagement-list__item .tile {
-  /* one column slot, inset so both boundary lines stay visible:
-     line · box · line */
-  flex: 0 0 calc(33.3333% - 1.9em);
-  margin: 0 0.95em;
+  /* one column slot, filled nearly edge to edge — the hairline pair
+     is the separation, like the reference */
+  flex: 0 0 calc(33.3333% - 0.9em);
+  margin: 0 0.45em;
   max-width: none;
 }
 
