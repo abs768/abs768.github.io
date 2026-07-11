@@ -193,20 +193,12 @@
         if (advanced) return;
         advanced = true;
         intro.classList.add('intro--done');
+        // once the word has faded, remove the intro entirely — the
+        // greeting becomes the top of the page
         setTimeout(() => {
-          document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-        }, 700);
-        // once we've scrolled away, quietly restore the finished word —
-        // transitions off for a frame so there's no visible pop, and
-        // scrolling back to the top shows it sitting there, complete
-        setTimeout(() => {
-          const anim = intro.querySelector('.intro__anim');
-          anim.classList.add('intro__anim--notrans');
-          intro.classList.remove('intro--done');
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => anim.classList.remove('intro__anim--notrans'));
-          });
-        }, 2200);
+          intro.style.display = 'none';
+          window.scrollTo(0, 0);
+        }, 950);
       };
 
       // prep: hide each stroke behind its own dash offset
@@ -411,6 +403,34 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && !peek.hidden) close();
     });
+  }
+
+  // the greeting says hi in rotation: hi, gr\u00fcetzi, bonjour
+  const greetEl = document.getElementById('greet');
+  if (greetEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const greetings = ['hi', 'gr\u00fcetzi', 'bonjour'];
+    let gi = 0;
+    const erase = () => {
+      const t = greetEl.textContent;
+      if (t.length > 0) {
+        greetEl.textContent = t.slice(0, -1);
+        setTimeout(erase, 80);
+      } else {
+        gi = (gi + 1) % greetings.length;
+        type();
+      }
+    };
+    const type = () => {
+      const target = greetings[gi];
+      const t = greetEl.textContent;
+      if (t.length < target.length) {
+        greetEl.textContent = target.slice(0, t.length + 1);
+        setTimeout(type, 110);
+      } else {
+        setTimeout(erase, 2800);
+      }
+    };
+    setTimeout(erase, 3200);
   }
 
   // scroll reveal
