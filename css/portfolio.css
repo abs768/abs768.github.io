@@ -163,12 +163,17 @@ section::before {
   content: "";
   position: absolute;
   inset: 0 1rem;
+  /* each column boundary is a pair of hairlines around a narrow gutter */
   background-image: repeating-linear-gradient(
     90deg,
-    transparent 0,
-    transparent calc(16.6666% - 1px),
-    rgba(255, 255, 255, 0.06) calc(16.6666% - 1px),
-    rgba(255, 255, 255, 0.06) 16.6666%
+    rgba(255, 255, 255, 0.07) 0,
+    rgba(255, 255, 255, 0.07) 1px,
+    transparent 1px,
+    transparent 13px,
+    rgba(255, 255, 255, 0.07) 13px,
+    rgba(255, 255, 255, 0.07) 14px,
+    transparent 14px,
+    transparent 16.6666%
   );
   pointer-events: none;
 }
@@ -670,7 +675,7 @@ a:hover {
 }
 
 .words__samples__item {
-  padding-right: 0.9em;
+  padding: 0 0.95em; /* the box floats between its boundary lines */
 }
 
 .words__samples__item a {
@@ -838,13 +843,16 @@ a:hover {
 }
 
 .engagement-list__item .tile {
-  flex: 0 0 33.3333%; /* exactly one background column */
+  /* one column slot, inset so both boundary lines stay visible:
+     line · box · line */
+  flex: 0 0 calc(33.3333% - 1.9em);
+  margin: 0 0.95em;
   max-width: none;
 }
 
 .engagement-list__text {
-  padding-left: 1.6em;
-  padding-right: 1.6em;
+  padding-left: 0.9em;
+  padding-right: 1.4em;
   flex: 1;
 }
 
