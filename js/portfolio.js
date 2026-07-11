@@ -101,6 +101,7 @@
   if (sayHi && send && message) {
     sayHi.addEventListener('click', (e) => {
       e.preventDefault();
+      if (document.body.classList.contains('is-sent')) return;
       const writing = document.body.classList.toggle('is-writing');
       if (writing) {
         setTimeout(() => message.focus(), 400);
@@ -111,7 +112,30 @@
 
     const senderEmail = document.getElementById('senderEmail');
     const thanksName = document.getElementById('thanksName');
-    const thanksBack = document.getElementById('thanksBack');
+
+    // a short burst of confetti, palette colors, then gone
+    const popConfetti = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const colors = ['#1c86ff', '#ff4fa0', '#ffe07a', '#2ee6a8', '#b48aff', '#ff4757'];
+      const wrap = document.createElement('div');
+      wrap.className = 'confetti';
+      document.body.appendChild(wrap);
+      for (let i = 0; i < 90; i += 1) {
+        const p = document.createElement('span');
+        p.style.background = colors[i % colors.length];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = -(4 + Math.random() * 16) + 'vh';
+        wrap.appendChild(p);
+        p.animate(
+          [
+            { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${(Math.random() - 0.5) * 28}vw, ${65 + Math.random() * 50}vh) rotate(${360 + Math.random() * 720}deg)`, opacity: 0 }
+          ],
+          { duration: 2200 + Math.random() * 1600, easing: 'cubic-bezier(0.2, 0.6, 0.4, 1)', fill: 'forwards' }
+        );
+      }
+      setTimeout(() => wrap.remove(), 4200);
+    };
 
     // "zurich@gmail.com" -> "Zurich", "tushar.panthri@x.com" -> "Tushar"
     const firstNameFrom = (addr) => {
@@ -138,6 +162,8 @@
       if (thanksName) thanksName.textContent = addr ? ' ' + firstNameFrom(addr) : '';
       document.body.classList.remove('is-writing');
       document.body.classList.add('is-sent');
+      message.blur();
+      popConfetti();
     });
 
     if (senderEmail) {
@@ -152,20 +178,11 @@
       }
     });
 
-    if (thanksBack) {
-      thanksBack.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.body.classList.remove('is-sent');
-        message.value = '';
-        if (senderEmail) senderEmail.value = '';
-      });
-    }
   }
 
   // copy email: one click, no mail app required
   const copyEmailBtn = document.getElementById('copyEmail');
   const copyEmailText = document.getElementById('copyEmailText');
-  const thanksCopy = document.getElementById('thanksCopy');
   const copyEmail = (onDone) => {
     const done = () => onDone && onDone();
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -184,15 +201,6 @@
       copyEmail(() => {
         copyEmailText.textContent = 'copied ✓';
         setTimeout(() => { copyEmailText.textContent = 'copy email'; }, 1800);
-      });
-    });
-  }
-  if (thanksCopy) {
-    thanksCopy.addEventListener('click', (e) => {
-      e.preventDefault();
-      copyEmail(() => {
-        thanksCopy.textContent = 'copied ✓';
-        setTimeout(() => { thanksCopy.textContent = 'copy my email'; }, 1800);
       });
     });
   }
