@@ -316,45 +316,37 @@
     onScroll();
   }
 
-  // the conversation on the screen: type, answer, cite, repeat
-  const chatQ = document.getElementById('chatQ');
-  const chatA = document.getElementById('chatA');
-  const chatAText = document.getElementById('chatAText');
-  const chatCites = document.getElementById('chatCites');
-  if (chatQ && chatA && chatAText && chatCites) {
-    const turns = [
-      { q: 'what does the warranty cover?', a: 'Parts and labor for 24 months — accidental damage is excluded.', c: ['p.4 §2', 'p.11 §5'] },
-      { q: 'who signed the 2019 agreement?', a: 'No retrieved passage answers this. I can\u2019t say.', c: ['refusal'] },
-      { q: 'summarize the termination clause', a: 'Either party may exit with 30 days\u2019 written notice after year one.', c: ['p.7 §9'] }
-    ];
-    if (reduceMotionLab) {
-      chatQ.textContent = turns[0].q;
-      chatAText.textContent = turns[0].a;
-      chatCites.innerHTML = turns[0].c.map((c) => `<span>${c}</span>`).join('');
-      chatA.classList.add('is-in');
-    } else {
-      let turn = 0;
-      const playTurn = () => {
-        const t = turns[turn % turns.length];
-        turn += 1;
-        chatQ.textContent = '';
-        chatA.classList.remove('is-in');
-        let i = 0;
-        const type = setInterval(() => {
-          chatQ.textContent = t.q.slice(0, ++i);
-          if (i >= t.q.length) {
-            clearInterval(type);
-            setTimeout(() => {
-              chatAText.textContent = t.a;
-              chatCites.innerHTML = t.c.map((c) => `<span>${c}</span>`).join('');
-              chatA.classList.add('is-in');
-              setTimeout(playTurn, 3600);
-            }, 600);
-          }
-        }, 55);
-      };
-      playTurn();
-    }
+  // the screen zooms under the cursor, slow and smooth, like leaning
+  // into a photo — wheel/trackpad in, ease back out on leave
+  const screenZoom = document.getElementById('screenZoom');
+  const screenArt = document.getElementById('screenArt');
+  if (screenZoom && screenArt) {
+    const BASE = 1.15;
+    let z = 1;
+    let tz = 1;
+    let ox = 50;
+    let oy = 50;
+
+    screenZoom.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      // wheel intensity maps to zoom speed, clamped 1x–3.2x
+      tz = Math.min(3.2, Math.max(1, tz * (1 - e.deltaY * 0.0022)));
+    }, { passive: false });
+
+    screenZoom.addEventListener('mousemove', (e) => {
+      const r = screenZoom.getBoundingClientRect();
+      ox = ((e.clientX - r.left) / r.width) * 100;
+      oy = ((e.clientY - r.top) / r.height) * 100;
+    }, { passive: true });
+
+    screenZoom.addEventListener('mouseleave', () => { tz = 1; });
+
+    (function zoomLoop() {
+      z += (tz - z) * 0.055; // the "slowly, slowly" part
+      screenArt.style.transformOrigin = `${ox.toFixed(1)}% ${oy.toFixed(1)}%`;
+      screenArt.style.transform = `scale(${(BASE * z).toFixed(4)})`;
+      requestAnimationFrame(zoomLoop);
+    })();
   }
 
   // hover-to-zoom dashboard: origin follows the cursor

@@ -1124,18 +1124,18 @@ a:hover {
 }
 
 .device__stand {
-  width: 12%;
-  height: 44px;
+  width: 22%;
+  height: 120px;
   margin: 0 auto;
-  background: linear-gradient(180deg, #1a1a20, #101014);
+  background: linear-gradient(180deg, #e3e3e7 0%, #cbcbd1 70%, #a9a9b0 100%);
 }
 
 .device__foot {
-  width: 26%;
-  height: 8px;
+  width: 22%;
+  height: 10px;
   margin: 0 auto;
-  border-radius: 4px 4px 8px 8px;
-  background: #1a1a20;
+  border-radius: 0 0 4px 4px;
+  background: linear-gradient(180deg, #f2f2f4, #9d9da4);
 }
 
 /* the conversation on the screen */
@@ -1514,5 +1514,34 @@ a:hover {
 @media (max-width: 47.99em) {
   .spec-strip {
     width: 28px;
+  }
+}
+
+/* the flashy screen: layered iridescent gradients, drifting hue */
+.screenart {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(120% 90% at 15% 20%, rgba(255, 92, 138, 0.95), transparent 55%),
+    radial-gradient(100% 80% at 85% 12%, rgba(255, 236, 150, 0.95), transparent 50%),
+    radial-gradient(130% 100% at 78% 85%, rgba(124, 92, 255, 0.95), transparent 58%),
+    radial-gradient(110% 90% at 22% 82%, rgba(46, 230, 168, 0.9), transparent 55%),
+    conic-gradient(from 210deg at 55% 45%, #00e0ff, #b48aff, #ff4fa0, #ffe07a, #7ad7a0, #00e0ff);
+  filter: saturate(1.4) blur(16px);
+  transform: scale(1.15);
+  transform-origin: 50% 50%;
+  will-change: transform;
+  animation: artDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes artDrift {
+  to {
+    filter: saturate(1.4) blur(16px) hue-rotate(70deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screenart {
+    animation: none;
   }
 }

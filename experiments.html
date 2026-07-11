@@ -240,21 +240,13 @@
     </p>
 
     <div class="device" id="docDevice">
-      <div class="device__screen">
-        <div class="chatdemo">
-          <div class="chatdemo__bubble chatdemo__bubble--q">
-            <span id="chatQ"></span><span class="chatdemo__caret" aria-hidden="true"></span>
-          </div>
-          <div class="chatdemo__bubble chatdemo__bubble--a" id="chatA">
-            <p id="chatAText"></p>
-            <div class="chatdemo__cites" id="chatCites"></div>
-          </div>
-        </div>
+      <div class="device__screen" id="screenZoom">
+        <div class="screenart" id="screenArt" aria-hidden="true"></div>
       </div>
       <div class="device__stand" aria-hidden="true"></div>
       <div class="device__foot" aria-hidden="true"></div>
     </div>
-    <p class="card-hint">a private conversation, rendered live &mdash; it grows as you scroll</p>
+    <p class="card-hint">scroll inside the screen &mdash; it zooms slowly, like leaning into a photo</p>
 
     <div class="xp-diagram">
       <svg class="diag" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg" aria-label="DocGPT architecture">
@@ -407,26 +399,26 @@
     <div class="xp-diagram xp-diagram--wide">
       <svg class="diag" id="pipeSvg" viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" aria-label="MarketPulse streaming pipeline">
         <!-- lanes -->
-        <path id="pipe-a" d="M120,60 L180,60" fill="none" stroke="none"/>
-        <path id="pipe-b" d="M290,60 L350,60" fill="none" stroke="none"/>
-        <path id="pipe-c" d="M460,60 L520,60" fill="none" stroke="none"/>
+        <path id="pipe-a" d="M130,60 L168,60" fill="none" stroke="none"/>
+        <path id="pipe-b" d="M302,60 L340,60" fill="none" stroke="none"/>
+        <path id="pipe-c" d="M470,60 L502,60" fill="none" stroke="none"/>
         <path id="pipe-d" d="M575,84 L575,120" fill="none" stroke="none"/>
-        <path id="pipe-e" d="M520,150 C440,170 320,175 250,166" fill="none" stroke="none"/>
+        <path id="pipe-e" d="M486,152 C420,174 330,178 277,166" fill="none" stroke="none"/>
 
         <g class="diag-box">
-          <rect x="20" y="40" width="100" height="40"/>
-          <rect x="180" y="40" width="110" height="40"/>
-          <rect x="350" y="40" width="110" height="40"/>
-          <rect x="520" y="40" width="110" height="44"/>
-          <rect x="520" y="120" width="110" height="60"/>
-          <rect x="140" y="140" width="110" height="40"/>
+          <rect x="14" y="40" width="116" height="40"/>
+          <rect x="168" y="40" width="134" height="40"/>
+          <rect x="340" y="40" width="130" height="40"/>
+          <rect x="502" y="40" width="146" height="44"/>
+          <rect x="486" y="120" width="178" height="66"/>
+          <rect x="112" y="140" width="166" height="40"/>
         </g>
         <g class="diag-arrow">
-          <path d="M120,60 L180,60"/>
-          <path d="M290,60 L350,60"/>
-          <path d="M460,60 L520,60"/>
+          <path d="M130,60 L168,60"/>
+          <path d="M302,60 L340,60"/>
+          <path d="M470,60 L502,60"/>
           <path d="M575,84 L575,120"/>
-          <path d="M520,150 C440,170 320,175 250,166"/>
+          <path d="M486,152 C420,174 330,178 277,166"/>
         </g>
         <g class="diag-label" text-anchor="middle">
           <text x="70" y="58">finnhub</text>
