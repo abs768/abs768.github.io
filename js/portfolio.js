@@ -176,12 +176,14 @@
   const introBall = document.getElementById('introBall');
   const reduceMotionIntro = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // a reload always replays the intro from the start; only moving
+  // around within the site (lab -> home, back/forward) skips it
   let skipIntro = false;
-  try {
-    skipIntro = sessionStorage.getItem('introPlayed') === '1';
-  } catch (e) { /* private mode */ }
-  if (!skipIntro && document.referrer.indexOf(location.origin) === 0) {
-    skipIntro = true; // came from another page of this site
+  const navEntry = performance.getEntriesByType('navigation')[0];
+  const navType = navEntry ? navEntry.type : 'navigate';
+  if (navType !== 'reload') {
+    if (document.referrer.indexOf(location.origin) === 0) skipIntro = true;
+    if (navType === 'back_forward') skipIntro = true;
   }
 
   if (intro && skipIntro) {
@@ -203,7 +205,6 @@
       const advance = () => {
         if (advanced) return;
         advanced = true;
-        try { sessionStorage.setItem('introPlayed', '1'); } catch (e) {}
         intro.classList.add('intro--done');
         // once the word has faded, remove the intro entirely — the
         // greeting becomes the top of the page
@@ -351,6 +352,31 @@
     }, { passive: true });
 
     screenZoom.addEventListener('mouseleave', () => { tz = 1; });
+
+    // pinch to zoom on touch devices
+    let pinchDist = 0;
+    screenZoom.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        pinchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+      }
+    }, { passive: true });
+    screenZoom.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && pinchDist > 0) {
+        e.preventDefault();
+        const d = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        tz = Math.min(4.5, Math.max(1, tz * (d / pinchDist)));
+        pinchDist = d;
+        const r = screenZoom.getBoundingClientRect();
+        ox = (((e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left) / r.width) * 100;
+        oy = (((e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top) / r.height) * 100;
+      }
+    }, { passive: false });
 
     (function zoomLoop() {
       z += (tz - z) * 0.055; // the "slowly, slowly" part
