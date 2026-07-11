@@ -538,8 +538,15 @@ a:hover {
 }
 
 .tile-wordmark--paper {
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
-  background-image: linear-gradient(90deg, #ff7ab8, #ffe07a, #7ad7ff);
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  background-image: linear-gradient(90deg, #ff7ab8, #ffe07a, #7ad7ff, #b48aff, #ff7ab8);
+  background-size: 250% 100%;
+  animation: wordShimmer 7s ease-in-out infinite alternate;
+}
+
+@keyframes wordShimmer {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
 }
 
 .tile-stat--k {
@@ -675,6 +682,19 @@ a:hover {
   flex: 1;
 }
 
+.tile-assist__bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+  transform: translateX(-100%);
+  animation: barSweep 2.8s ease-in-out infinite;
+}
+
+@keyframes barSweep {
+  to { transform: translateX(100%); }
+}
+
 .tile-assist__bar span:nth-child(1) { background: #1c86ff; }
 .tile-assist__bar span:nth-child(2) { background: #ff4757; }
 .tile-assist__bar span:nth-child(3) { background: #ffe07a; }
@@ -708,6 +728,20 @@ a:hover {
 .tile-more {
   font-size: 2.4rem;
   color: #fff;
+  animation: nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-wordmark--paper,
+  .tile-assist__bar::after,
+  .tile-more {
+    animation: none;
+  }
 }
 
 /* ============ write ============ */
@@ -1342,6 +1376,11 @@ a:hover {
   height: 72%;
   max-height: 240px;
   width: auto;
+}
+
+.tile-art--big {
+  height: 88%;
+  max-height: 300px;
 }
 
 .tile-art--chart {

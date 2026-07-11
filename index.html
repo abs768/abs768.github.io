@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/portfolio.css?v=20260711k">
+  <link rel="stylesheet" href="css/portfolio.css?v=20260711l">
 </head>
 
 <body>
@@ -115,11 +115,18 @@
         <div class="workgrid__item__container">
           <div class="workgrid__item__title">a solar system that learned to orbit</div>
           <div class="workgrid__item__content workgrid__item__content--center">
-            <svg class="tile-art" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="110" cy="105" r="15" fill="#ffe07a"/>
-              <ellipse cx="110" cy="105" rx="72" ry="30" fill="none" stroke="#3a3a48" stroke-width="1" stroke-dasharray="3,4"/>
-              <circle r="6" fill="#1c86ff">
-                <animateMotion dur="6s" repeatCount="indefinite" path="M182,105 A72,30 0 1 1 38,105 A72,30 0 1 1 182,105"/>
+            <svg class="tile-art tile-art--big" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <radialGradient id="sun-g"><stop offset="0" stop-color="#fff6c8"/><stop offset="1" stop-color="#ffb45c"/></radialGradient>
+              </defs>
+              <circle cx="110" cy="105" r="26" fill="url(#sun-g)" style="filter: drop-shadow(0 0 20px rgba(255, 214, 90, 0.9))"/>
+              <ellipse cx="110" cy="105" rx="88" ry="36" fill="none" stroke="#3a3a48" stroke-width="1" stroke-dasharray="3,4"/>
+              <ellipse cx="110" cy="105" rx="55" ry="22" fill="none" stroke="#2e2e3a" stroke-width="1" stroke-dasharray="2,4"/>
+              <circle r="7" fill="#1c86ff" style="filter: drop-shadow(0 0 8px rgba(28, 134, 255, 0.9))">
+                <animateMotion dur="7s" repeatCount="indefinite" path="M198,105 A88,36 0 1 1 22,105 A88,36 0 1 1 198,105"/>
+              </circle>
+              <circle r="4.5" fill="#ff4fa0" style="filter: drop-shadow(0 0 7px rgba(255, 79, 160, 0.9))">
+                <animateMotion dur="3.8s" repeatCount="indefinite" path="M165,105 A55,22 0 1 1 55,105 A55,22 0 1 1 165,105"/>
               </circle>
             </svg>
           </div>
@@ -133,19 +140,25 @@
         <div class="workgrid__item__container">
           <div class="workgrid__item__title">wolfiedex &mdash; find campus events by intent</div>
           <div class="workgrid__item__content workgrid__item__content--center">
-            <svg class="tile-art" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="110" cy="105" r="7" fill="#1c86ff"/>
-              <circle cx="110" cy="105" r="12" fill="none" stroke="#1c86ff" stroke-width="1.5">
-                <animate attributeName="r" values="12;78" dur="2.6s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.8;0" dur="2.6s" repeatCount="indefinite"/>
+            <svg class="tile-art tile-art--big" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="110" cy="105" r="9" fill="#1c86ff" style="filter: drop-shadow(0 0 12px rgba(28, 134, 255, 0.95))"/>
+              <circle cx="110" cy="105" r="12" fill="none" stroke="#1c86ff" stroke-width="2.5">
+                <animate attributeName="r" values="12;92" dur="2.6s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.95;0" dur="2.6s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="110" cy="105" r="12" fill="none" stroke="#1c86ff" stroke-width="1.5">
-                <animate attributeName="r" values="12;78" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
-                <animate attributeName="opacity" values="0.8;0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+              <circle cx="110" cy="105" r="12" fill="none" stroke="#7ad7ff" stroke-width="2">
+                <animate attributeName="r" values="12;92" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.85;0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
               </circle>
-              <circle cx="52" cy="66" r="4" fill="#8f949c"/>
-              <circle cx="168" cy="82" r="4" fill="#8f949c"/>
-              <circle cx="146" cy="160" r="4" fill="#8f949c"/>
+              <circle cx="48" cy="60" r="5" fill="#ffe07a">
+                <animate attributeName="opacity" values="0.25;1;0.25" dur="2.6s" begin="0.7s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="174" cy="80" r="5" fill="#2ee6a8">
+                <animate attributeName="opacity" values="0.25;1;0.25" dur="2.6s" begin="1.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="150" cy="166" r="5" fill="#ff4fa0">
+                <animate attributeName="opacity" values="0.25;1;0.25" dur="2.6s" begin="2.1s" repeatCount="indefinite"/>
+              </circle>
             </svg>
           </div>
         </div>
@@ -158,11 +171,17 @@
         <div class="workgrid__item__container">
           <div class="workgrid__item__title">docgpt &mdash; your documents never leave your machine</div>
           <div class="workgrid__item__content workgrid__item__content--center">
-            <svg class="tile-art" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <path d="M84,96 V76 a26,26 0 0 1 52,0 v20" fill="none" stroke="#dfdfdf" stroke-width="6" stroke-linecap="round"/>
-              <rect x="70" y="96" width="80" height="62" rx="12" fill="none" stroke="#dfdfdf" stroke-width="6"/>
-              <circle cx="110" cy="124" r="7" fill="#1c86ff"/>
-              <path d="M110,128 L110,142" stroke="#1c86ff" stroke-width="5" stroke-linecap="round"/>
+            <svg class="tile-art tile-art--big" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M84,96 V76 a26,26 0 0 1 52,0 v20" fill="none" stroke="#dfdfdf" stroke-width="7" stroke-linecap="round">
+                <animateTransform attributeName="transform" type="translate" values="0,-12; 0,0; 0,0; 0,-12" keyTimes="0; 0.15; 0.85; 1" dur="4.5s" repeatCount="indefinite"/>
+              </path>
+              <rect x="70" y="96" width="80" height="62" rx="12" fill="none" stroke="#dfdfdf" stroke-width="7"/>
+              <g style="filter: drop-shadow(0 0 10px rgba(28, 134, 255, 0.9))">
+                <circle cx="110" cy="124" r="8" fill="#1c86ff">
+                  <animate attributeName="opacity" values="1;0.45;1" dur="2.2s" repeatCount="indefinite"/>
+                </circle>
+                <path d="M110,128 L110,144" stroke="#1c86ff" stroke-width="6" stroke-linecap="round"/>
+              </g>
             </svg>
           </div>
         </div>
@@ -176,8 +195,9 @@
           <div class="workgrid__item__title">forensic llm wiki &mdash; evidence graphs from case notes</div>
           <div class="workgrid__item__content workgrid__item__content--center">
             <svg class="tile-nodegraph" viewBox="0 0 220 360" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <g stroke="#6f5cf0" stroke-width="0.8" opacity="0.45" fill="none">
+              <g stroke="#6f5cf0" stroke-width="1" fill="none">
                 <path d="M100,210 L48,86 M100,210 L96,58 M100,210 L142,62 M100,210 L172,116 M100,210 L182,180 M100,210 L146,246 M100,210 L118,318 M100,210 L84,136 M142,62 L172,116 M142,62 L96,58 M172,116 L182,180"/>
+                <animate attributeName="opacity" values="0.35;0.8;0.35" dur="4s" repeatCount="indefinite"/>
               </g>
               <g fill="#8f949c">
                 <circle cx="48" cy="86" r="4"/>
@@ -189,7 +209,9 @@
                 <circle cx="118" cy="318" r="4"/>
                 <circle cx="84" cy="136" r="3.4" opacity="0.55"/>
               </g>
-              <circle cx="100" cy="210" r="6.5" fill="#8a63f5"/>
+              <circle cx="100" cy="210" r="6.5" fill="#8a63f5" style="filter: drop-shadow(0 0 10px rgba(138, 99, 245, 0.95))">
+                <animate attributeName="r" values="6.5;9;6.5" dur="2.6s" repeatCount="indefinite"/>
+              </circle>
               <g class="tile-nodegraph__labels" text-anchor="middle">
                 <text x="48" y="102">final_report</text>
                 <text x="96" y="46">contradictions</text>
@@ -231,6 +253,17 @@
                 <path d="M158,202 C168,218 174,232 174,248"/>
                 <path d="M110,276 L110,312"/>
               </g>
+              <path id="flow-lane" d="M64,54 C64,80 104,84 110,120 L110,312" fill="none" stroke="none"/>
+              <path id="flow-lane2" d="M158,54 C158,80 124,84 118,92" fill="none" stroke="none"/>
+              <circle r="4" fill="#1c86ff" style="filter: drop-shadow(0 0 6px rgba(28, 134, 255, 0.9))">
+                <animateMotion dur="4.2s" repeatCount="indefinite"><mpath href="#flow-lane"/></animateMotion>
+              </circle>
+              <circle r="4" fill="#ffe07a" style="filter: drop-shadow(0 0 6px rgba(255, 224, 122, 0.9))">
+                <animateMotion dur="4.2s" begin="2.1s" repeatCount="indefinite"><mpath href="#flow-lane"/></animateMotion>
+              </circle>
+              <circle r="3.5" fill="#2ee6a8">
+                <animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#flow-lane2"/></animateMotion>
+              </circle>
               <g class="tile-flow__labels" text-anchor="middle">
                 <text x="64" y="42">sources</text>
                 <text x="158" y="42">schema</text>
@@ -261,7 +294,9 @@
                 <rect x="140" y="146" width="56" height="34" rx="4"/>
                 <path d="M60,105 C95,100 105,60 140,47 M60,105 L140,105 M60,105 C95,110 105,150 140,163"/>
               </g>
-              <circle cx="164" cy="47" r="4" fill="#2ee6a8"/>
+              <circle cx="164" cy="47" r="4" fill="#2ee6a8" style="filter: drop-shadow(0 0 8px rgba(46, 230, 168, 0.9))">
+                <animate attributeName="r" values="4;7;4" keyTimes="0;0.9;1" dur="2.8s" repeatCount="indefinite"/>
+              </circle>
               <circle cx="164" cy="105" r="4" fill="#ffe07a"/>
               <circle cx="164" cy="163" r="4" fill="#ff4757"/>
               <circle r="6" fill="#dfdfdf">
@@ -281,16 +316,28 @@
           <div class="workgrid__item__title">marketpulse &mdash; real-time stock pipeline</div>
           <div class="workgrid__item__content workgrid__item__content--center">
             <svg class="tile-art tile-art--chart" viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="area-g" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#2ee6a8" stop-opacity="0.35"/>
+                  <stop offset="1" stop-color="#2ee6a8" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
               <g stroke="#1e1e26" stroke-width="1">
                 <path d="M20,70 H440 M20,130 H440 M20,190 H440 M20,250 H440"/>
               </g>
+              <path d="M20,240 L80,205 L140,222 L200,150 L260,176 L320,104 L380,128 L440,58 L440,280 L20,280 Z"
+                    fill="url(#area-g)" class="tile-chart__area"/>
+              <path pathLength="100" class="tile-chart__line tile-chart__line--alt"
+                    d="M20,255 L80,238 L140,246 L200,208 L260,224 L320,178 L380,196 L440,140"
+                    fill="none" stroke="#ff4fa0" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity="0.8"/>
               <path id="tickline" class="tile-chart__line" pathLength="100"
                     d="M20,240 L80,205 L140,222 L200,150 L260,176 L320,104 L380,128 L440,58"
-                    fill="none" stroke="#2ee6a8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
-              <circle r="4.5" fill="#7ad7ff">
+                    fill="none" stroke="#2ee6a8" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"
+                    style="filter: drop-shadow(0 0 8px rgba(46, 230, 168, 0.75))"/>
+              <circle r="5" fill="#7ad7ff" style="filter: drop-shadow(0 0 7px rgba(122, 215, 255, 0.9))">
                 <animateMotion dur="4s" repeatCount="indefinite"><mpath href="#tickline"/></animateMotion>
               </circle>
-              <circle r="4.5" fill="#ffe07a">
+              <circle r="5" fill="#ffe07a" style="filter: drop-shadow(0 0 7px rgba(255, 224, 122, 0.9))">
                 <animateMotion dur="4s" begin="2s" repeatCount="indefinite"><mpath href="#tickline"/></animateMotion>
               </circle>
             </svg>
@@ -580,6 +627,6 @@
     </figure>
   </div>
 
-  <script src="js/portfolio.js?v=20260711k" defer></script>
+  <script src="js/portfolio.js?v=20260711l" defer></script>
 </body>
 </html>
