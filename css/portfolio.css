@@ -163,19 +163,27 @@ section::before {
   content: "";
   position: absolute;
   inset: 0 1rem;
-  /* each column boundary is a pair of hairlines around a narrow gutter */
+  /* each column boundary is a pair of hairlines around a narrow gutter —
+     dull enough to sit behind the text, never on it */
   background-image: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.07) 0,
-    rgba(255, 255, 255, 0.07) 1px,
+    rgba(255, 255, 255, 0.035) 0,
+    rgba(255, 255, 255, 0.035) 1px,
     transparent 1px,
     transparent 13px,
-    rgba(255, 255, 255, 0.07) 13px,
-    rgba(255, 255, 255, 0.07) 14px,
+    rgba(255, 255, 255, 0.035) 13px,
+    rgba(255, 255, 255, 0.035) 14px,
     transparent 14px,
     transparent 16.6666%
   );
   pointer-events: none;
+  z-index: 0;
+}
+
+/* content always paints above the guide lines */
+section > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* headings: mono throughout, modest scale */
