@@ -144,6 +144,14 @@
       senderEmail.addEventListener('input', () => senderEmail.classList.remove('is-error'));
     }
 
+    // cmd/ctrl+enter sends from the textarea
+    message.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        send.click();
+      }
+    });
+
     if (thanksBack) {
       thanksBack.addEventListener('click', (e) => {
         e.preventDefault();
@@ -152,6 +160,41 @@
         if (senderEmail) senderEmail.value = '';
       });
     }
+  }
+
+  // copy email: one click, no mail app required
+  const copyEmailBtn = document.getElementById('copyEmail');
+  const copyEmailText = document.getElementById('copyEmailText');
+  const thanksCopy = document.getElementById('thanksCopy');
+  const copyEmail = (onDone) => {
+    const done = () => onDone && onDone();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(EMAIL).then(done).catch(() => {
+        window.prompt('copy my email:', EMAIL);
+        done();
+      });
+    } else {
+      window.prompt('copy my email:', EMAIL);
+      done();
+    }
+  };
+  if (copyEmailBtn && copyEmailText) {
+    copyEmailBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      copyEmail(() => {
+        copyEmailText.textContent = 'copied ✓';
+        setTimeout(() => { copyEmailText.textContent = 'copy email'; }, 1800);
+      });
+    });
+  }
+  if (thanksCopy) {
+    thanksCopy.addEventListener('click', (e) => {
+      e.preventDefault();
+      copyEmail(() => {
+        thanksCopy.textContent = 'copied ✓';
+        setTimeout(() => { thanksCopy.textContent = 'copy my email'; }, 1800);
+      });
+    });
   }
 
   // write drawer
