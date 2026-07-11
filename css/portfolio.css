@@ -880,6 +880,7 @@ a:hover {
 
 .footer__links {
   display: flex;
+  flex-wrap: wrap; /* the row folds gracefully on small screens */
   gap: 0.7em;
   align-items: center;
 }
@@ -1277,75 +1278,6 @@ a:hover {
   }
 }
 
-/* ============ say hi: email + thank-you state ============ */
-.about__email {
-  opacity: 0;
-  pointer-events: none;
-  width: min(24em, 100%);
-  color: #fff;
-  background: none;
-  border: none;
-  border-bottom: 1.5px solid #2a2a33;
-  outline: none;
-  padding: 0.5em 0;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 1em;
-  transform: translateY(44px);
-  transition: all 0.8s var(--mono-ease), border-color 0.2s ease;
-  margin-bottom: 1em;
-}
-
-.about__email:focus {
-  border-bottom-color: var(--mono-blue);
-}
-
-.about__email.is-error {
-  border-bottom-color: #ff4757;
-}
-
-.is-writing .about__email {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-
-/* sent: the pill itself says thank you */
-.btn__text__done {
-  display: none;
-}
-
-.is-sent .btn--hi .btn__text__main,
-.is-sent .btn--hi .btn__text__sub,
-.is-sent .btn--hi .btn__icon {
-  display: none;
-}
-
-.is-sent .btn--hi .btn__text__done {
-  display: inline;
-}
-
-.is-sent .btn--hi {
-  background: none;
-  border-color: #fff;
-  pointer-events: none; /* said and done */
-}
-
-/* confetti burst */
-.confetti {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 99997;
-  overflow: hidden;
-}
-
-.confetti span {
-  position: absolute;
-  width: 7px;
-  height: 11px;
-  border-radius: 2px;
-}
-
 /* ============ workgrid art tiles ============ */
 .tile-art {
   height: 72%;
@@ -1607,13 +1539,3 @@ a:hover {
   }
 }
 
-/* the copy-email pill hides while writing (send takes its place) */
-.btn--copy {
-  transition: opacity 0.4s var(--mono-ease), transform 0.2s var(--mono-ease),
-              background 0.2s ease, color 0.2s ease;
-}
-
-.is-writing .btn--copy {
-  opacity: 0;
-  pointer-events: none;
-}

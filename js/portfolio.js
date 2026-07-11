@@ -110,9 +110,6 @@
       }
     });
 
-    const senderEmail = document.getElementById('senderEmail');
-    const thanksName = document.getElementById('thanksName');
-
     // a short burst of confetti, palette colors, then gone
     const popConfetti = () => {
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -137,38 +134,16 @@
       setTimeout(() => wrap.remove(), 4200);
     };
 
-    // "zurich@gmail.com" -> "Zurich", "tushar.panthri@x.com" -> "Tushar"
-    const firstNameFrom = (addr) => {
-      const token = (addr.split('@')[0] || '')
-        .replace(/[0-9]+/g, ' ')
-        .split(/[._\-+ ]+/)
-        .filter(Boolean)[0] || '';
-      return token ? token[0].toUpperCase() + token.slice(1) : 'friend';
-    };
-
     send.addEventListener('click', (e) => {
       e.preventDefault();
-      const addr = senderEmail ? senderEmail.value.trim() : '';
-      // sharing an email is optional — only a malformed one blocks
-      if (addr && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) {
-        senderEmail.classList.add('is-error');
-        senderEmail.focus();
-        return;
-      }
-      if (senderEmail) senderEmail.classList.remove('is-error');
-      const body = message.value.trim() + (addr ? `\n\n— ${addr}` : '');
+      const body = message.value.trim();
       window.location.href =
         `mailto:${EMAIL}?subject=${encodeURIComponent('hi bhavani')}&body=${encodeURIComponent(body)}`;
-      if (thanksName) thanksName.textContent = addr ? ' ' + firstNameFrom(addr) : '';
       document.body.classList.remove('is-writing');
       document.body.classList.add('is-sent');
       message.blur();
       popConfetti();
     });
-
-    if (senderEmail) {
-      senderEmail.addEventListener('input', () => senderEmail.classList.remove('is-error'));
-    }
 
     // cmd/ctrl+enter sends from the textarea
     message.addEventListener('keydown', (e) => {
@@ -178,31 +153,6 @@
       }
     });
 
-  }
-
-  // copy email: one click, no mail app required
-  const copyEmailBtn = document.getElementById('copyEmail');
-  const copyEmailText = document.getElementById('copyEmailText');
-  const copyEmail = (onDone) => {
-    const done = () => onDone && onDone();
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(EMAIL).then(done).catch(() => {
-        window.prompt('copy my email:', EMAIL);
-        done();
-      });
-    } else {
-      window.prompt('copy my email:', EMAIL);
-      done();
-    }
-  };
-  if (copyEmailBtn && copyEmailText) {
-    copyEmailBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      copyEmail(() => {
-        copyEmailText.textContent = 'copied ✓';
-        setTimeout(() => { copyEmailText.textContent = 'copy email'; }, 1800);
-      });
-    });
   }
 
   // write drawer
