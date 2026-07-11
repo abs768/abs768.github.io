@@ -178,13 +178,13 @@ section::before {
   pointer-events: none;
 }
 
-/* headings: Plex Sans for section titles, mono for greeting */
+/* headings: mono throughout, modest scale */
 h1 {
   margin-top: 0;
   margin-bottom: 0.4em;
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: 2.6em;
-  font-weight: 600;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 2em;
+  font-weight: 500;
   line-height: 1.15em;
 }
 
@@ -233,7 +233,7 @@ a:hover {
 
 .about__title {
   font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-size: 3.2em;
+  font-size: 3em;
   font-weight: 400;
   margin-bottom: 0.5em;
   transition: all 0.65s var(--mono-ease);
@@ -348,6 +348,49 @@ a:hover {
   pointer-events: auto;
   opacity: 1;
   transform: translateY(0);
+}
+
+/* sent: the pill itself says thank you */
+.btn__text__done {
+  display: none;
+}
+
+.is-sent .btn--hi .btn__text__main,
+.is-sent .btn--hi .btn__text__sub,
+.is-sent .btn--hi .btn__icon {
+  display: none;
+}
+
+.is-sent .btn--hi .btn__text__done {
+  display: inline;
+}
+
+.is-sent .btn--hi {
+  background: none;
+  border-color: #fff;
+  pointer-events: none; /* said and done */
+}
+
+.is-sent .btn--snd,
+.is-sent #message {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* confetti burst */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99997;
+  overflow: hidden;
+}
+
+.confetti span {
+  position: absolute;
+  width: 7px;
+  height: 11px;
+  border-radius: 2px;
 }
 
 /* ============ work grid (full bleed) ============ */
