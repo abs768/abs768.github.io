@@ -469,7 +469,7 @@
 
     <ul class="engagement-list">
       <li class="engagement-list__item">
-        <a href="https://www.stonybrook.edu/" target="_blank" rel="noopener noreferrer">
+        <a href="Bhavani_Resume.pdf" class="resume-peek" data-resume="images/resume/gra.png">
           <div class="tile tile--4to3 tile--icon">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M12 44l10-14 8 6 10-16 12 10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -483,7 +483,7 @@
         </a>
       </li>
       <li class="engagement-list__item">
-        <a href="https://www.navitas.tech/" target="_blank" rel="noopener noreferrer">
+        <a href="Bhavani_Resume.pdf" class="resume-peek" data-resume="images/resume/navitas.png">
           <div class="tile tile--4to3 tile--icon">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="14" y="14" width="36" height="10" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
@@ -498,7 +498,7 @@
         </a>
       </li>
       <li class="engagement-list__item">
-        <a href="https://developer.nvidia.com/embedded/jetson-modules" target="_blank" rel="noopener noreferrer">
+        <a href="Bhavani_Resume.pdf" class="resume-peek" data-resume="images/resume/nvidia.png">
           <div class="tile tile--4to3 tile--icon">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <rect x="18" y="18" width="28" height="28" rx="4" fill="none" stroke="#fff" stroke-width="2"/>
@@ -511,8 +511,20 @@
           </div>
         </a>
       </li>
+    </ul>
+  </section>
+
+  <!-- education -->
+  <section class="speaking">
+    <h1>Education</h1>
+    <p class="section__lead">
+      Each one links to the actual curriculum, so you can see what the
+      program covers.
+    </p>
+
+    <ul class="engagement-list">
       <li class="engagement-list__item">
-        <a href="https://www.stonybrook.edu/" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.stonybrook.edu/ams/academics/graduate/data-science.html" target="_blank" rel="noopener noreferrer">
           <div class="tile tile--4to3 tile--icon">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M32 14L8 26l24 12 24-12z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
@@ -521,12 +533,12 @@
           </div>
           <div class="engagement-list__text">
             <h2>MS, Applied Math &amp; Statistics</h2>
-            <p>Stony Brook University, GPA 3.75</p>
+            <p>Stony Brook University, GPA 3.75 &mdash; the data science track</p>
           </div>
         </a>
       </li>
       <li class="engagement-list__item">
-        <a href="https://www.srmist.edu.in/" target="_blank" rel="noopener noreferrer">
+        <a href="https://www.srmist.edu.in/program/b-tech-cse-with-specialization-in-artificial-intelligence-and-machine-learning/" target="_blank" rel="noopener noreferrer">
           <div class="tile tile--4to3 tile--icon">
             <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <circle cx="32" cy="32" r="16" fill="none" stroke="#fff" stroke-width="2"/>
@@ -535,7 +547,7 @@
           </div>
           <div class="engagement-list__text">
             <h2>B.Tech, CS (AI &amp; ML)</h2>
-            <p>SRM Institute, CGPA 9.66</p>
+            <p>SRM Institute, CGPA 9.66 &mdash; the AI &amp; ML curriculum</p>
           </div>
         </a>
       </li>
@@ -557,6 +569,18 @@
       <p>made in Stony Brook</p>
     </div>
   </section>
+
+  <!-- resume peek overlay -->
+  <div class="peek" id="peek" role="dialog" aria-modal="true" aria-label="Resume excerpt" hidden>
+    <div class="peek__backdrop" data-peek-close></div>
+    <figure class="peek__panel">
+      <button class="peek__close" data-peek-close aria-label="Close">&times;</button>
+      <img id="peekImg" src="" alt="Resume excerpt">
+      <figcaption>
+        <a href="Bhavani_Resume.pdf" target="_blank" rel="noopener">open the full resume &rarr;</a>
+      </figcaption>
+    </figure>
+  </div>
 
   <script src="js/portfolio.js" defer></script>
 </body>

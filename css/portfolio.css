@@ -1364,3 +1364,84 @@ a:hover {
 .intro__anim--notrans {
   transition: none !important;
 }
+
+/* ============ resume peek overlay ============ */
+.peek {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.peek[hidden] {
+  display: none;
+}
+
+.peek__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+}
+
+.peek__panel {
+  position: relative;
+  margin: 0;
+  max-width: min(880px, 94vw);
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.6rem;
+  animation: peekIn 0.35s var(--mono-ease);
+}
+
+.peek__panel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.peek__panel figcaption {
+  text-align: center;
+  padding: 0.55em 0 0.3em;
+  font-size: 0.85rem;
+}
+
+.peek__panel figcaption a {
+  color: #000;
+  text-decoration: underline;
+}
+
+.peek__close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 100%;
+  background: var(--mono-tile);
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.peek__close:hover {
+  background: #1c1c24;
+}
+
+@keyframes peekIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

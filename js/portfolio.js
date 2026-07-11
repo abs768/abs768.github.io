@@ -389,6 +389,30 @@
     });
   });
 
+  // resume peek: work entries open the matching resume excerpt
+  const peek = document.getElementById('peek');
+  const peekImg = document.getElementById('peekImg');
+  if (peek && peekImg) {
+    const close = () => {
+      peek.hidden = true;
+      document.body.style.overflow = '';
+    };
+    document.querySelectorAll('.resume-peek').forEach((a) => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        peekImg.src = a.dataset.resume;
+        peek.hidden = false;
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    peek.querySelectorAll('[data-peek-close]').forEach((el) => {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !peek.hidden) close();
+    });
+  }
+
   // scroll reveal
   const targets = document.querySelectorAll('section, .workgrid__item');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
