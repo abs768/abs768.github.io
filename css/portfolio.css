@@ -1105,37 +1105,41 @@ a:hover {
 
 /* display mockup: thin bezel, stand, live screen */
 .device {
-  margin-top: 2.6em;
-  max-width: 620px;
+  margin: 3em auto 0; /* the display takes the stage, centered */
+  max-width: 960px;
   transition: transform 0.15s ease-out;
   will-change: transform;
 }
 
 .device__screen {
+  position: relative;
   aspect-ratio: 16 / 9;
-  background: #0a0a0d;
-  border: 10px solid #1a1a20;
-  border-radius: 14px;
+  background: #050507;
+  border: 12px solid #060608; /* thin black glass border */
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 2.5px #55555c,           /* machined silver rim */
+    0 0 0 3.5px #1c1c20,
+    0 44px 110px -42px rgba(0, 143, 255, 0.22);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 30px 80px -30px rgba(0, 143, 255, 0.18);
 }
 
 .device__stand {
-  width: 22%;
-  height: 120px;
+  width: 19%;
+  height: 150px;
   margin: 0 auto;
-  background: linear-gradient(180deg, #e3e3e7 0%, #cbcbd1 70%, #a9a9b0 100%);
+  background: linear-gradient(180deg, #e6e6ea 0%, #d3d3d8 55%, #ababb2 100%);
 }
 
 .device__foot {
-  width: 22%;
-  height: 10px;
+  width: 19%;
+  height: 12px;
   margin: 0 auto;
-  border-radius: 0 0 4px 4px;
-  background: linear-gradient(180deg, #f2f2f4, #9d9da4);
+  border-radius: 0 0 5px 5px;
+  background: linear-gradient(180deg, #f4f4f6, #97979e);
 }
 
 /* the conversation on the screen */

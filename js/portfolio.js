@@ -330,7 +330,7 @@
     screenZoom.addEventListener('wheel', (e) => {
       e.preventDefault();
       // wheel intensity maps to zoom speed, clamped 1x–3.2x
-      tz = Math.min(3.2, Math.max(1, tz * (1 - e.deltaY * 0.0022)));
+      tz = Math.min(4.5, Math.max(1, tz * (1 - e.deltaY * 0.0022)));
     }, { passive: false });
 
     screenZoom.addEventListener('mousemove', (e) => {
