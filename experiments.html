@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/portfolio.css?v=20260711n">
+  <link rel="stylesheet" href="css/portfolio.css?v=20260711o">
 </head>
 
 <body>
@@ -548,35 +548,87 @@
     <a class="btn btn--margin" href="https://github.com/abs768/Robust-Image-Classification-with-MC-Dropout-Tri-Gating-and-SVHN-Calibrated-OOD-Thresholds" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
   </section>
 
-  <!-- solar system rl -->
-  <section class="xp" id="solar">
-    <h3 class="xp__kicker">AR/VR &middot; reinforcement learning</h3>
-    <h1>A Solar System That Learned to Orbit</h1>
+  <!-- geometry dash rl -->
+  <section class="xp" id="geometrydash">
+    <h3 class="xp__kicker">Reinforcement learning &middot; sim-to-real</h3>
+    <h1>Teaching an AI to Play Geometry Dash</h1>
     <p class="section__lead">
-      An immersive AR/VR solar system where deep reinforcement learning keeps the
-      planets honest &mdash; instead of hard-coding orbital mechanics, an agent
-      learns stable motion, and you walk through the result.
+      The actual retail game on Steam &mdash; not a clone. One button, one square,
+      instant death on contact: a perfect testbed for frame-perfect timing.
+      Agents train in a stripped-down physics simulator that runs 2,000&times;
+      faster than the game, then a custom C++ mod drives the real thing &mdash;
+      reading game state and pressing jump in real time.
     </p>
 
-    <div class="xp-diagram">
-      <svg class="diag" id="orbitSvg" viewBox="0 0 640 190" xmlns="http://www.w3.org/2000/svg" aria-label="Orbit sketch">
-        <circle cx="320" cy="95" r="16" fill="#ffe07a"/>
-        <ellipse cx="320" cy="95" rx="120" ry="52" fill="none" stroke="#7e838c" stroke-width="1" stroke-dasharray="3,4"/>
-        <ellipse cx="320" cy="95" rx="210" ry="82" fill="none" stroke="#7e838c" stroke-width="1" stroke-dasharray="3,4"/>
-        <circle r="7" fill="#1c86ff">
-          <animateMotion dur="7s" repeatCount="indefinite" path="M440,95 A120,52 0 1 1 200,95 A120,52 0 1 1 440,95"/>
-        </circle>
-        <circle r="5" fill="#ff4fa0">
-          <animateMotion dur="12s" repeatCount="indefinite" path="M530,95 A210,82 0 1 1 110,95 A210,82 0 1 1 530,95"/>
-        </circle>
+    <div class="xp-diagram xp-diagram--wide">
+      <svg class="diag" viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" aria-label="Sim-to-real pipeline">
+        <g class="diag-box">
+          <rect x="20" y="38" width="128" height="44"/>
+          <rect x="172" y="38" width="128" height="44"/>
+          <rect x="324" y="38" width="108" height="44"/>
+          <rect x="456" y="38" width="128" height="44"/>
+          <rect x="608" y="38" width="98" height="44"/>
+        </g>
+        <g class="diag-arrow">
+          <path d="M148,60 L172,60"/>
+          <path d="M300,60 L324,60"/>
+          <path d="M432,60 L456,60"/>
+          <path d="M584,60 L608,60"/>
+        </g>
+        <g class="diag-label" text-anchor="middle">
+          <text x="84" y="56">simulator</text>
+          <text x="84" y="70" class="diag-dim">2,000&times; real time</text>
+          <text x="236" y="56">train</text>
+          <text x="236" y="70" class="diag-dim">dqn &middot; ppo &middot; ga</text>
+          <text x="378" y="56">policy</text>
+          <text x="378" y="70" class="diag-dim">sim-only</text>
+          <text x="520" y="56">c++ mod</text>
+          <text x="520" y="70" class="diag-dim">state out, jump in</text>
+          <text x="657" y="56">real game</text>
+          <text x="657" y="70" class="diag-dim">steam</text>
+        </g>
+
+        <!-- the cube runs the level below -->
+        <path d="M20,200 L706,200" stroke="#3a3a48" stroke-width="2"/>
+        <g fill="#0e0e12" stroke="#dfdfdf" stroke-width="2">
+          <path d="M200,200 L214,172 L228,200 Z"/>
+          <path d="M228,200 L242,172 L256,200 Z"/>
+          <path d="M440,200 L454,172 L468,200 Z"/>
+        </g>
+        <g style="filter: drop-shadow(0 0 8px rgba(46, 230, 168, 0.8))">
+          <g>
+            <rect x="-13" y="-26" width="26" height="26" rx="5" fill="#2ee6a8"/>
+            <animateMotion dur="3.6s" repeatCount="indefinite"
+              path="M40,200 L150,200 Q214,96 280,200 L400,200 Q454,104 508,200 L690,200"/>
+          </g>
+        </g>
       </svg>
     </div>
-    <button class="replay" data-replay="orbitSvg" aria-label="Replay the orbits">&#8635;</button>
+
+    <div class="xp-reqs">
+      <div>
+        <h4>how it works</h4>
+        <ul>
+          <li>Training in the live game means waiting days at 60&nbsp;fps; the fast simulator turns millions of frames into seconds</li>
+          <li>A controlled bake-off: PPO &mdash; the trendy default &mdash; reliably got stuck, refusing the first risky jump because failing cost it reward; DQN and a genetic algorithm cleared every level</li>
+          <li>Sim-to-real transfer: a policy that had only ever seen the simulator drove the genuine game and jumped real spikes</li>
+        </ul>
+      </div>
+      <div>
+        <h4>results</h4>
+        <ul>
+          <li>A full official level cleared start to finish, learned from a human demonstration</li>
+          <li>Custom C++ mod bridges policy and game: state out, button press in, every frame</li>
+          <li>The lesson: the best algorithm depends on the problem, not the hype</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="xp-specs">
-      <span>unity</span><span>deep rl</span><span>ar/vr</span><span>c#</span>
+      <span>python</span><span>dqn</span><span>ppo</span><span>genetic algorithm</span><span>c++ mod</span><span>sim-to-real</span>
     </div>
-    <a class="btn btn--margin" href="https://github.com/abs768/Solar-System-Model-using-Deep-Reinforcement-Learning" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
+    <a class="btn btn--margin" href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> project page</a>
+    <a class="btn btn--margin" href="https://github.com/abs768/geometry-dash-rl" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
   </section>
 
   <!-- footer -->
@@ -597,6 +649,6 @@
     </div>
   </section>
 
-  <script src="js/portfolio.js?v=20260711n" defer></script>
+  <script src="js/portfolio.js?v=20260711o" defer></script>
 </body>
 </html>

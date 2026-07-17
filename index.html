@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/portfolio.css?v=20260711n">
+  <link rel="stylesheet" href="css/portfolio.css?v=20260711o">
 </head>
 
 <body>
@@ -110,25 +110,25 @@
       </a>
     </div>
 
-    <!-- 2: solar system, learned to orbit -->
+    <!-- 2: geometry dash rl -->
     <div class="workgrid__item workgrid__item--2">
-      <a href="experiments.html#solar">
+      <a href="experiments.html#geometrydash">
         <div class="workgrid__item__container">
-          <div class="workgrid__item__title">a solar system that learned to orbit</div>
+          <div class="workgrid__item__title">teaching an ai to play geometry dash</div>
           <div class="workgrid__item__content workgrid__item__content--center">
             <svg class="tile-art tile-art--big" viewBox="0 0 220 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <defs>
-                <radialGradient id="sun-g"><stop offset="0" stop-color="#fff6c8"/><stop offset="1" stop-color="#ffb45c"/></radialGradient>
-              </defs>
-              <circle cx="110" cy="105" r="26" fill="url(#sun-g)" style="filter: drop-shadow(0 0 20px rgba(255, 214, 90, 0.9))"/>
-              <ellipse cx="110" cy="105" rx="88" ry="36" fill="none" stroke="#3a3a48" stroke-width="1" stroke-dasharray="3,4"/>
-              <ellipse cx="110" cy="105" rx="55" ry="22" fill="none" stroke="#2e2e3a" stroke-width="1" stroke-dasharray="2,4"/>
-              <circle r="7" fill="#1c86ff" style="filter: drop-shadow(0 0 8px rgba(28, 134, 255, 0.9))">
-                <animateMotion dur="7s" repeatCount="indefinite" path="M198,105 A88,36 0 1 1 22,105 A88,36 0 1 1 198,105"/>
-              </circle>
-              <circle r="4.5" fill="#ff4fa0" style="filter: drop-shadow(0 0 7px rgba(255, 79, 160, 0.9))">
-                <animateMotion dur="3.8s" repeatCount="indefinite" path="M165,105 A55,22 0 1 1 55,105 A55,22 0 1 1 165,105"/>
-              </circle>
+              <path d="M14,158 L206,158" stroke="#3a3a48" stroke-width="2"/>
+              <g fill="#0e0e12" stroke="#dfdfdf" stroke-width="2">
+                <path d="M96,158 L108,132 L120,158 Z"/>
+                <path d="M120,158 L132,132 L144,158 Z"/>
+              </g>
+              <g style="filter: drop-shadow(0 0 8px rgba(46, 230, 168, 0.85))">
+                <g>
+                  <rect x="-11" y="-22" width="22" height="22" rx="4" fill="#2ee6a8"/>
+                  <animateMotion dur="2.6s" repeatCount="indefinite"
+                    path="M30,158 L74,158 Q120,74 166,158 L196,158 L30,158"/>
+                </g>
+              </g>
             </svg>
           </div>
         </div>
@@ -472,7 +472,7 @@
       <ul class="words__extended">
         <li><a href="https://github.com/abs768/forensic-llm-wiki-obsidian" target="_blank" rel="noopener noreferrer">Forensic LLM Wiki &mdash; case notes into timelines, IOCs, and contradictions</a></li>
         <li><a href="https://github.com/abs768/MarketPulse-Real-Time-Stock-Pipeline" target="_blank" rel="noopener noreferrer">MarketPulse &mdash; 3k records/sec through Kafka into Snowflake</a></li>
-        <li><a href="https://github.com/abs768/Solar-System-Model-using-Deep-Reinforcement-Learning" target="_blank" rel="noopener noreferrer">A solar system, learned by deep reinforcement learning</a></li>
+        <li><a href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener noreferrer">Teaching an AI to play the real Geometry Dash &mdash; sim-to-real RL</a></li>
         <li><a href="https://github.com/abs768/Robust-Image-Classification-with-MC-Dropout-Tri-Gating-and-SVHN-Calibrated-OOD-Thresholds" target="_blank" rel="noopener noreferrer">Robust image classification with MC dropout and OOD thresholds</a></li>
         <li><a href="https://github.com/abs768/Stock-Sentiment-Analysis-using-News-Headlines" target="_blank" rel="noopener noreferrer">Stock sentiment analysis from news headlines</a></li>
       </ul>
@@ -492,9 +492,9 @@
       <div class="play__content">
         <h1>Play</h1>
         <p>
-          I&rsquo;m driven by curiosity &mdash; teaching a solar system to orbit
-          with reinforcement learning, building voice assistants, benchmarking
-          local LLMs, and the occasional spaceship battle game.
+          I&rsquo;m driven by curiosity &mdash; teaching an AI to beat the real
+          Geometry Dash, building voice assistants, benchmarking local LLMs,
+          and the occasional spaceship battle game.
         </p>
         <a class="btn btn--margin" href="experiments.html" target="_blank" rel="noopener">
           <span class="btn__icon">&rarr;</span> explore
@@ -628,6 +628,6 @@
     </figure>
   </div>
 
-  <script src="js/portfolio.js?v=20260711n" defer></script>
+  <script src="js/portfolio.js?v=20260711o" defer></script>
 </body>
 </html>
