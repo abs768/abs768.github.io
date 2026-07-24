@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bhavani S. &middot; Junior Software Developer</title>
+  <title>Bhavani S. &middot; AI/ML Engineer &amp; Software Engineer</title>
 
   <!-- SEO -->
   <meta name="description" content="hi. i'm bhavani. Software engineer — backend, data pipelines, and AI systems. Spring Boot, GraphRAG, Kafka. MS at Stony Brook, May 2026.">
@@ -13,7 +13,7 @@
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Bhavani S. &middot; Junior Software Developer">
+  <meta property="og:title" content="Bhavani S. &middot; AI/ML Engineer &amp; Software Engineer">
   <meta property="og:description" content="Software engineer — backend, data pipelines, and AI systems. MS at Stony Brook, May 2026.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_US">
@@ -422,6 +422,101 @@
     </div>
 
   </div>
+
+  <!-- live demos -->
+  <section class="speaking demos">
+    <h1>Live</h1>
+    <p class="section__lead">
+      Running deployments, not screenshots of things that once worked. Each
+      rebuilds itself from the code &mdash; so if a pipeline breaks, the page
+      breaks with it.
+    </p>
+
+    <ul class="demo-grid">
+      <li class="demo-card">
+        <a href="https://abs768.github.io/smb-growth-intelligence/" target="_blank" rel="noopener">
+          <img class="demo-card__shot" src="images/demos/smb-growth-intelligence.jpg"
+               alt="Dashboard showing 217,131 events processed through ten pipeline models in about twelve seconds"
+               loading="lazy" width="900" height="563">
+        </a>
+        <div class="demo-card__body">
+          <h2>SMB Growth Intelligence</h2>
+          <p>
+            GA4 events through layered ETL, a point-in-time feature store, a
+            propensity model and a data-quality engine. CI runs the whole
+            pipeline on every push and publishes whatever it produced &mdash;
+            the wall time on the page changes run to run because it is real.
+          </p>
+          <div class="demo-card__tags">
+            <span class="demo-card__tag">duckdb</span>
+            <span class="demo-card__tag">feature store</span>
+            <span class="demo-card__tag">bigquery-portable</span>
+          </div>
+          <div class="demo-card__actions">
+            <a class="btn btn--sm" href="https://abs768.github.io/smb-growth-intelligence/" target="_blank" rel="noopener">
+              <span class="btn__icon">&rarr;</span> launch
+            </a>
+            <a class="demo-card__src" href="https://github.com/abs768/smb-growth-intelligence" target="_blank" rel="noopener">source</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="demo-card">
+        <a href="https://abs768.github.io/forecasting-baselines/" target="_blank" rel="noopener">
+          <img class="demo-card__shot" src="images/demos/forecasting-baselines.jpg"
+               alt="Results page headlined: the random walk is not beaten"
+               loading="lazy" width="900" height="563">
+        </a>
+        <div class="demo-card__body">
+          <h2>Forecasting Baselines</h2>
+          <p>
+            Naive, moving average, Ridge, XGBoost and an LSTM benchmarked
+            walk-forward on sixteen years of real market data. None of them beat
+            &ldquo;tomorrow = today&rdquo; on RMSE, which is the correct result
+            &mdash; and the headline says so rather than burying it.
+          </p>
+          <div class="demo-card__tags">
+            <span class="demo-card__tag">walk-forward</span>
+            <span class="demo-card__tag">leakage-safe</span>
+            <span class="demo-card__tag">negative result</span>
+          </div>
+          <div class="demo-card__actions">
+            <a class="btn btn--sm" href="https://abs768.github.io/forecasting-baselines/" target="_blank" rel="noopener">
+              <span class="btn__icon">&rarr;</span> launch
+            </a>
+            <a class="demo-card__src" href="https://github.com/abs768/forecasting-baselines" target="_blank" rel="noopener">source</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="demo-card">
+        <a href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener">
+          <img class="demo-card__shot" src="images/demos/geometry-dash-rl.jpg"
+               alt="Write-up on training reinforcement-learning agents to play Geometry Dash"
+               loading="lazy" width="900" height="563">
+        </a>
+        <div class="demo-card__body">
+          <h2>Geometry Dash RL</h2>
+          <p>
+            DQN, PPO and a genetic algorithm trained in a headless simulator
+            running four thousand times faster than real time, then dropped into
+            the retail game through a C++ mod to clear a full official level.
+          </p>
+          <div class="demo-card__tags">
+            <span class="demo-card__tag">reinforcement learning</span>
+            <span class="demo-card__tag">sim-to-real</span>
+            <span class="demo-card__tag">pytorch</span>
+          </div>
+          <div class="demo-card__actions">
+            <a class="btn btn--sm" href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener">
+              <span class="btn__icon">&rarr;</span> launch
+            </a>
+            <a class="demo-card__src" href="https://github.com/abs768/geometry-dash-rl" target="_blank" rel="noopener">source</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>
 
   <!-- write -->
   <section class="words">
