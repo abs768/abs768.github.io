@@ -29,7 +29,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="css/portfolio.css?v=20260711o">
+  <link rel="stylesheet" href="css/portfolio.css?v=20260910a">
 </head>
 
 <body>
@@ -99,6 +99,77 @@
   <div class="workgrid">
 
     <!-- 1: papertrail wordmark (wide) -->
+    <!-- 13: gridshift — carbon-aware compute scheduling -->
+    <div class="workgrid__item workgrid__item--13">
+      <a href="experiments.html#gridshift">
+        <div class="workgrid__item__container">
+          <div class="workgrid__item__title">gridshift &mdash; when should the training run start?</div>
+          <div class="workgrid__item__content workgrid__item__content--center">
+            <svg class="tile-art tile-art--big" viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="118" y="34" width="64" height="130" rx="3" fill="rgba(46, 230, 168, 0.13)" stroke="rgba(46, 230, 168, 0.5)" stroke-width="1"/>
+              <g fill="#4a4f57">
+                <rect x="22" y="96" width="10" height="68" rx="2"/>
+                <rect x="38" y="88" width="10" height="76" rx="2"/>
+                <rect x="54" y="74" width="10" height="90" rx="2"/>
+                <rect x="70" y="82" width="10" height="82" rx="2"/>
+                <rect x="86" y="98" width="10" height="66" rx="2"/>
+                <rect x="102" y="114" width="10" height="50" rx="2"/>
+                <rect x="198" y="86" width="10" height="78" rx="2"/>
+                <rect x="214" y="70" width="10" height="94" rx="2"/>
+                <rect x="230" y="58" width="10" height="106" rx="2"/>
+                <rect x="246" y="66" width="10" height="98" rx="2"/>
+                <rect x="262" y="80" width="10" height="84" rx="2"/>
+              </g>
+              <g fill="#2ee6a8">
+                <rect x="124" y="128" width="10" height="36" rx="2"/>
+                <rect x="140" y="136" width="10" height="28" rx="2"/>
+                <rect x="156" y="132" width="10" height="32" rx="2"/>
+                <rect x="172" y="122" width="10" height="42" rx="2"/>
+              </g>
+              <path d="M22,164 L278,164" stroke="#33383f" stroke-width="1.2"/>
+              <path d="M22,120 C60,104 92,150 118,146 C150,142 168,120 198,102 C230,84 252,92 278,88"
+                    fill="none" stroke="#008fff" stroke-width="1.8" stroke-linecap="round" opacity="0.85"/>
+              <circle r="4.5" fill="#dfdfdf">
+                <animateMotion dur="6s" repeatCount="indefinite"
+                  path="M22,120 C60,104 92,150 118,146 C150,142 168,120 198,102 C230,84 252,92 278,88"/>
+              </circle>
+              <text x="150" y="26" text-anchor="middle" fill="#2ee6a8" font-family="IBM Plex Mono, monospace" font-size="11">4h window</text>
+            </svg>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- 14: retentionlab — churn triage under a call budget -->
+    <div class="workgrid__item workgrid__item--14">
+      <a href="experiments.html#retentionlab">
+        <div class="workgrid__item__container">
+          <div class="workgrid__item__title">retentionlab &mdash; who gets the call when you can only make 200?</div>
+          <div class="workgrid__item__content workgrid__item__content--center">
+            <svg class="tile-art tile-art--big" viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <g stroke="#33383f" stroke-width="1.2" fill="none">
+                <path d="M40,174 L272,174"/>
+                <path d="M40,174 L40,26"/>
+              </g>
+              <path d="M40,174 L272,26" stroke="#4a4f57" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/>
+              <path d="M40,174 C86,110 128,72 168,56 C208,40 244,32 272,26"
+                    fill="none" stroke="#ff4fa0" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M86,174 L86,120" stroke="#008fff" stroke-width="1.4" stroke-dasharray="4 4"/>
+              <path d="M40,120 L86,120" stroke="#008fff" stroke-width="1.4" stroke-dasharray="4 4"/>
+              <circle cx="86" cy="120" r="5" fill="#008fff"/>
+              <circle r="4.5" fill="#dfdfdf" opacity="0.9">
+                <animateMotion dur="5.2s" repeatCount="indefinite"
+                  path="M40,174 C86,110 128,72 168,56 C208,40 244,32 272,26"/>
+              </circle>
+              <text x="142" y="142" fill="#008fff" font-family="IBM Plex Mono, monospace" font-size="10">top 20% of calls</text>
+              <text x="142" y="157" fill="#008fff" font-family="IBM Plex Mono, monospace" font-size="10">&rarr; 51% of churners</text>
+              <text x="150" y="192" text-anchor="middle" fill="#7e838c" font-family="IBM Plex Mono, monospace" font-size="10">calls made &rarr;</text>
+            </svg>
+          </div>
+        </div>
+      </a>
+    </div>
+
     <div class="workgrid__item workgrid__item--1">
       <a href="experiments.html#papertrail">
         <div class="workgrid__item__container">
@@ -434,6 +505,63 @@
 
     <ul class="demo-grid">
       <li class="demo-card">
+        <a href="https://gridshift-green.vercel.app" target="_blank" rel="noopener">
+          <img class="demo-card__shot" src="images/demos/gridshift.jpg"
+               alt="GridShift landing page showing 96,360 NYISO zone-hours aligned and an 8.3 percent carbon reduction against running immediately"
+               loading="lazy" decoding="async" width="900" height="563">
+        </a>
+        <div class="demo-card__body">
+          <h2>GridShift</h2>
+          <p>
+            Forecasts the gap between what the New York grid said it would do a
+            day ahead and what it actually did, then schedules a four-hour
+            compute job against carbon, cost and risk. The Pareto frontier and
+            the scheduler on the page are the real algorithm running over
+            seventy-one held-out days &mdash; not a recorded demo.
+          </p>
+          <div class="demo-card__tags">
+            <span class="demo-card__tag">causal tcn</span>
+            <span class="demo-card__tag">conformal intervals</span>
+            <span class="demo-card__tag">duckdb</span>
+          </div>
+          <div class="demo-card__actions">
+            <a class="btn btn--sm" href="https://gridshift-green.vercel.app" target="_blank" rel="noopener">
+              <span class="btn__icon">&rarr;</span> launch
+            </a>
+            <a class="demo-card__src" href="https://github.com/abs768/gridshift" target="_blank" rel="noopener">source</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="demo-card">
+        <a href="https://retentionlab-rho.vercel.app" target="_blank" rel="noopener">
+          <img class="demo-card__shot" src="images/demos/retentionlab.jpg"
+               alt="RetentionLab service page for calibrated churn ranking under a fixed outreach budget"
+               loading="lazy" decoding="async" width="900" height="563">
+        </a>
+        <div class="demo-card__body">
+          <h2>RetentionLab</h2>
+          <p>
+            Calibrated churn probabilities turned into a call list a retention
+            team could actually work: contacting the riskiest fifth reaches half
+            of all churners. The same frozen, checksum-verified artifact the
+            repository tests is the one answering requests here.
+          </p>
+          <div class="demo-card__tags">
+            <span class="demo-card__tag">calibration</span>
+            <span class="demo-card__tag">capacity ranking</span>
+            <span class="demo-card__tag">drift monitoring</span>
+          </div>
+          <div class="demo-card__actions">
+            <a class="btn btn--sm" href="https://retentionlab-rho.vercel.app" target="_blank" rel="noopener">
+              <span class="btn__icon">&rarr;</span> launch
+            </a>
+            <a class="demo-card__src" href="https://github.com/abs768/retentionlab" target="_blank" rel="noopener">source</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="demo-card">
         <a href="https://abs768.github.io/smb-growth-intelligence/" target="_blank" rel="noopener">
           <img class="demo-card__shot" src="images/demos/smb-growth-intelligence.jpg"
                alt="Dashboard showing 217,131 events processed through ten pipeline models in about twelve seconds"
@@ -723,6 +851,6 @@
     </figure>
   </div>
 
-  <script src="js/portfolio.js?v=20260711o" defer></script>
+  <script src="js/portfolio.js?v=20260910a" defer></script>
 </body>
 </html>

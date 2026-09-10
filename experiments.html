@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lab &middot; Bhavani S.</title>
 
-  <meta name="description" content="Seven experiments in systems that remember, pipelines that stream, and agents that cite their sources.">
+  <meta name="description" content="Nine experiments in systems that remember, pipelines that stream, schedulers that argue with the grid, and agents that cite their sources.">
   <meta name="author" content="Bhavani Shankar Ajith">
   <meta name="robots" content="index, follow">
 
@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/portfolio.css?v=20260711o">
+  <link rel="stylesheet" href="css/portfolio.css?v=20260910a">
 </head>
 
 <body>
@@ -35,7 +35,7 @@
     <h1>Lab</h1>
     <p class="section__lead">
       I&rsquo;m driven by curiosity &mdash; systems that remember, pipelines that
-      stream, and agents that cite their sources. Seven experiments, documented.
+      stream, and agents that cite their sources. Nine experiments, documented.
     </p>
   </section>
 
@@ -468,7 +468,8 @@
     <button class="replay" data-replay="pipeSvg" aria-label="Replay the stream">&#8635;</button>
 
     <div class="zoomcard" id="dashZoom">
-      <img src="images/Dashboard.png" alt="MarketPulse dashboard — move your cursor to inspect">
+      <img src="images/Dashboard.png" alt="MarketPulse dashboard — move your cursor to inspect"
+           loading="lazy" decoding="async" width="1024" height="1024">
     </div>
     <p class="card-hint">hover to inspect the dashboard up close</p>
 
@@ -631,6 +632,209 @@
     <a class="btn btn--margin" href="https://github.com/abs768/geometry-dash-rl" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
   </section>
 
+
+  <!-- gridshift -->
+  <section class="xp" id="gridshift">
+    <h3 class="xp__kicker">Carbon &amp; cost-aware scheduling</h3>
+    <h1>GridShift</h1>
+    <p class="section__lead">
+      A training run needs four consecutive hours before a deadline &mdash; so which
+      four? Grid carbon intensity and electricity price both move hour by hour, and
+      the New York ISO publishes both a day ahead. GridShift forecasts the gap between
+      that published signal and what the grid actually did, wraps every forecast in a
+      distribution-free interval, and then optimises a deadline-constrained schedule
+      against carbon, cost and risk across 96,360 zone-hours of official market data.
+    </p>
+
+    <div class="xp-diagram xp-diagram--wide">
+      <svg class="diag" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="GridShift architecture: four NYISO market reports through DuckDB and two competing models into a Pareto scheduler">
+        <g class="diag-box">
+          <rect x="16" y="14" width="136" height="38"/>
+          <rect x="16" y="66" width="136" height="38"/>
+          <rect x="16" y="118" width="136" height="38"/>
+          <rect x="16" y="170" width="136" height="38"/>
+          <rect x="196" y="76" width="170" height="44"/>
+          <rect x="196" y="158" width="170" height="44"/>
+          <rect x="420" y="24" width="146" height="44"/>
+          <rect x="420" y="108" width="146" height="44"/>
+          <rect x="420" y="196" width="146" height="44"/>
+          <rect x="598" y="108" width="118" height="44"/>
+        </g>
+        <g class="diag-arrow">
+          <path d="M152,33 C176,33 178,78 196,86"/>
+          <path d="M152,85 C176,85 180,90 196,94"/>
+          <path d="M152,137 C176,137 180,108 196,102"/>
+          <path d="M152,189 C178,189 180,118 196,110"/>
+          <path d="M281,120 L281,158"/>
+          <path d="M366,172 C398,160 402,70 420,52"/>
+          <path d="M366,190 C398,198 402,208 420,214"/>
+          <path d="M493,68 L493,108"/>
+          <path d="M493,196 L493,152"/>
+          <path d="M566,130 L598,130"/>
+        </g>
+        <g class="diag-label" text-anchor="middle">
+          <text x="84" y="31">P-71 day-ahead</text>
+          <text x="84" y="43" class="diag-dim">implied emission rate</text>
+          <text x="84" y="83">P-72 real-time</text>
+          <text x="84" y="95" class="diag-dim">5-minute dispatch</text>
+          <text x="84" y="135">P-2A day-ahead</text>
+          <text x="84" y="147" class="diag-dim">zonal lbmp</text>
+          <text x="84" y="187">P-24A real-time</text>
+          <text x="84" y="199" class="diag-dim">zonal lbmp</text>
+          <text x="281" y="96">duckdb + sql mart</text>
+          <text x="281" y="110" class="diag-dim">interval &rarr; hour &middot; dst-safe</text>
+          <text x="281" y="178">leakage-safe features</text>
+          <text x="281" y="192" class="diag-dim">masked at decision epoch</text>
+          <text x="493" y="44">xgboost</text>
+          <text x="493" y="58" class="diag-dim">engineered lags</text>
+          <text x="493" y="128">model selection</text>
+          <text x="493" y="142" class="diag-dim">expanding-window folds</text>
+          <text x="493" y="216">causal tcn</text>
+          <text x="493" y="230" class="diag-dim">learned 168h sequence</text>
+          <text x="657" y="128">conformal</text>
+          <text x="657" y="142" class="diag-dim">pareto scheduler</text>
+        </g>
+        <g class="diag-label" text-anchor="start">
+          <text x="16" y="276" class="diag-dim">the day-ahead signal is the benchmark &mdash; both models forecast only the residual against it</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="xp-reqs">
+      <div>
+        <h4>how it works</h4>
+        <ul>
+          <li>The decision is committed at the start of the operating day, so every lag and rolling statistic is masked against that boundary &mdash; which matters on the 25-hour autumn day, where a plain 24-hour shift would reach into the day it is predicting</li>
+          <li>Real-time rows are stamped interval-ending and the repeated daylight-saving hour is resolved by file order, so nothing is silently dropped or collided</li>
+          <li>Two modelling philosophies compete on identical rows: XGBoost with explicit lags against a causal TCN handed the raw 168-hour sequence, 253-hour receptive field, 160,025 parameters</li>
+          <li>Causality is measured, not asserted &mdash; perturbing the second half of the input leaves the first half of the encoding bit-identical, and the test suite asserts that zero</li>
+          <li>Split conformal intervals calibrated on a chronologically separate window, grouped by hour so the risk-aware policy has something to act on</li>
+        </ul>
+      </div>
+      <div>
+        <h4>what it found</h4>
+        <ul>
+          <li>Shifting the job away from the first feasible window changed the realised carbon score by &minus;8.30% against running immediately, over 71 held-out days</li>
+          <li>The ML forecast did <em>not</em> improve the decision over ranking windows by the raw day-ahead signal &mdash; it was 0.72% worse, and the write-up says so</li>
+          <li>The selection rule picked the TCN on pooled fold error; XGBoost was the stronger model on the holdout. Both numbers are published rather than the better one being chosen afterwards</li>
+          <li>Carbon and cost are near-collinear inside a zone (r = 0.973) because the emission rate is derived from the same price &mdash; so the Pareto frontier collapses to one point on 44 of 71 days</li>
+          <li>Moving the job across zones beat moving it across hours: &minus;13.50% carbon and &minus;11.83% cost against the same policy pinned to New York City</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-row" aria-label="GridShift headline metrics">
+      <div class="spec-card" style="background:#e9fff4">
+        <h4>CARBON &minus;8.30%</h4>
+        <p>ZONE-HOURS &mdash; 96,360 / 11 ZONES<br>COVERAGE &mdash; 94.23% ON 90% INTERVALS<br>ORACLE BOUND &mdash; &minus;13.43%<br>CROSS-ZONE &mdash; &minus;13.50%</p>
+      </div>
+      <span class="spec-strip" style="background:#2ee6a8"></span><span class="spec-strip" style="background:#1c86ff"></span><span class="spec-strip" style="background:#ffe07a"></span>
+    </div>
+
+    <div class="xp-specs">
+      <span>duckdb</span><span>sql</span><span>xgboost</span><span>pytorch tcn</span><span>conformal prediction</span><span>pareto optimisation</span><span>fastapi</span><span>vercel</span>
+    </div>
+    <a class="btn btn--margin" href="https://gridshift-green.vercel.app" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> live scheduler</a>
+    <a class="btn btn--margin" href="https://github.com/abs768/gridshift" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
+  </section>
+
+  <!-- retentionlab -->
+  <section class="xp" id="retentionlab">
+    <h3 class="xp__kicker">Decisions under a budget</h3>
+    <h1>RetentionLab</h1>
+    <p class="section__lead">
+      A retention team can only call a fraction of the base each cycle, so ranking
+      churn risk is not an accuracy contest &mdash; it is triage under a capacity
+      constraint. RetentionLab takes 7,043 telecom customers from a leakage-safe split
+      through a calibrated classifier to a capacity-ranked call list, then answers the
+      question the data cannot: how large a randomised trial would have to be before
+      anyone could claim the outreach actually worked.
+    </p>
+
+    <div class="xp-diagram xp-diagram--wide">
+      <svg class="diag" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="RetentionLab architecture: split, model, calibration, capacity ranking, experiment design and a monitored API">
+        <g class="diag-box">
+          <rect x="16" y="112" width="126" height="42"/>
+          <rect x="196" y="112" width="140" height="42"/>
+          <rect x="390" y="112" width="140" height="42"/>
+          <rect x="566" y="28" width="152" height="42"/>
+          <rect x="566" y="112" width="152" height="42"/>
+          <rect x="566" y="196" width="152" height="42"/>
+          <rect x="196" y="220" width="140" height="42"/>
+          <rect x="390" y="220" width="140" height="42"/>
+        </g>
+        <g class="diag-arrow">
+          <path d="M142,133 L196,133"/>
+          <path d="M336,133 L390,133"/>
+          <path d="M530,124 C548,112 550,62 566,49"/>
+          <path d="M530,133 L566,133"/>
+          <path d="M530,142 C548,154 550,204 566,217"/>
+          <path d="M266,154 L266,220"/>
+          <path d="M336,241 L390,241"/>
+          <path d="M460,220 C460,196 460,172 460,154"/>
+        </g>
+        <g class="diag-label" text-anchor="middle">
+          <text x="79" y="130">7,043 customers</text>
+          <text x="79" y="144" class="diag-dim">26.5% churn</text>
+          <text x="266" y="130">gradient boosting</text>
+          <text x="266" y="144" class="diag-dim">selected on pr-auc</text>
+          <text x="460" y="130">sigmoid calibration</text>
+          <text x="460" y="144" class="diag-dim">fitted on train folds</text>
+          <text x="642" y="46">capacity ranking</text>
+          <text x="642" y="60" class="diag-dim">top 10 / 20 / 30%</text>
+          <text x="642" y="130">typed api</text>
+          <text x="642" y="144" class="diag-dim">predict &middot; rank &middot; batch</text>
+          <text x="642" y="214">drift + metrics</text>
+          <text x="642" y="228" class="diag-dim">psi &middot; prometheus</text>
+          <text x="266" y="238">chronological split</text>
+          <text x="266" y="252" class="diag-dim">test scored once</text>
+          <text x="460" y="238">experiment design</text>
+          <text x="460" y="252" class="diag-dim">power &middot; mde</text>
+        </g>
+        <g class="diag-label" text-anchor="start">
+          <text x="16" y="288" class="diag-dim">every transformer is fitted inside the split &mdash; the test set is opened once, after the model is frozen</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="xp-reqs">
+      <div>
+        <h4>how it works</h4>
+        <ul>
+          <li>PR-AUC decides the model, not accuracy: the positive class is a 26.5% minority and the business use is ranking under a budget, so gradient boosting wins at 0.643 while <em>losing</em> on F1</li>
+          <li>Ranking quality and probability quality are separate problems &mdash; calibration is fitted with 5-fold CV on the training split alone and compared on validation, never on test</li>
+          <li>The retention policy converts probabilities into a call list at fixed capacity, reporting capture rate, precision among contacted, and lift against random outreach at each budget</li>
+          <li>The dataset records no retention action, so no causal effect is estimable from it; the project builds a prospective power/MDE module instead of inventing one</li>
+          <li>Serving is a typed FastAPI surface over a checksum-verified artifact: 12 endpoints, PSI drift against training-only reference distributions, Prometheus counters and latency histograms</li>
+        </ul>
+      </div>
+      <div>
+        <h4>what it found</h4>
+        <ul>
+          <li>Test ROC-AUC 0.855 and PR-AUC 0.670 against a 0.265 no-skill floor &mdash; roughly 2.5&times; the baseline, scored once on 1,057 held-out customers</li>
+          <li>Contacting the top 20% by risk reaches 143 of 280 churners where random outreach would reach about 56 &mdash; half of all churners from a fifth of the calls, a 2.55&times; lift</li>
+          <li>Precision decays from 75.5% to 58.2% as capacity grows from 10% to 30%, which is the expected shape and exactly what a capacity conversation needs</li>
+          <li>Calibration helped, but barely: Brier 0.13919 &rarr; 0.13809, at the cost of a slight PR-AUC decrease. The table would read the same if it had hurt</li>
+          <li>A 1,000-per-arm pilot can only detect a churn reduction of about 6 percentage points &mdash; proving a realistic 3-point offer needs 3,915 per arm at 80% power</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spec-row" aria-label="RetentionLab headline metrics">
+      <div class="spec-card" style="background:#fff1f6">
+        <h4>LIFT 2.55&times;</h4>
+        <p>TEST ROC-AUC &mdash; 0.855<br>TEST PR-AUC &mdash; 0.670 VS 0.265 FLOOR<br>TOP 20% &mdash; 143 OF 280 CHURNERS<br>MDE @ 1,000 / ARM &mdash; 6.0 pp</p>
+      </div>
+      <span class="spec-strip" style="background:#ff4fa0"></span><span class="spec-strip" style="background:#1c86ff"></span><span class="spec-strip" style="background:#2ee6a8"></span>
+    </div>
+
+    <div class="xp-specs">
+      <span>scikit-learn</span><span>calibration</span><span>experiment design</span><span>fastapi</span><span>prometheus</span><span>psi drift</span><span>docker</span><span>vercel</span>
+    </div>
+    <a class="btn btn--margin" href="https://retentionlab-rho.vercel.app" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> live service</a>
+    <a class="btn btn--margin" href="https://github.com/abs768/retentionlab" target="_blank" rel="noopener noreferrer"><span class="btn__icon">&rarr;</span> source</a>
+  </section>
+
   <!-- footer -->
   <section class="footer">
     <div class="footer__content">
@@ -649,6 +853,6 @@
     </div>
   </section>
 
-  <script src="js/portfolio.js?v=20260711o" defer></script>
+  <script src="js/portfolio.js?v=20260910a" defer></script>
 </body>
 </html>

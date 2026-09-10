@@ -24,73 +24,139 @@
     let my = -1000;
     let boxEl = null;
     let caretEl = null;
+    let running = false;
+
+    // Target geometry is measured only when the hovered element changes,
+    // never inside the animation frame — reading layout every frame while
+    // also writing to it is what makes a custom cursor stutter the page.
+    const target = { x: -1000, y: -1000, w: 36, h: 36, r: 18, caret: false };
     const cur = { x: -1000, y: -1000, w: 36, h: 36, r: 18 };
+    let painted = { w: -1, h: -1, r: -1 };
+
+    const measure = () => {
+      if (boxEl && boxEl.isConnected) {
+        const r = boxEl.getBoundingClientRect();
+        target.follow = false;
+        target.x = r.left + r.width / 2;
+        target.y = r.top + r.height / 2;
+        target.w = r.width + 14;
+        target.h = r.height + 14;
+        const br = parseFloat(getComputedStyle(boxEl).borderRadius);
+        target.r = Number.isFinite(br) && br > 0 ? Math.min(br + 7, target.h / 2) : 10;
+        target.caret = false;
+      } else if (caretEl && caretEl.isConnected) {
+        target.follow = true;
+        target.w = 3.5;
+        target.h = parseFloat(getComputedStyle(caretEl).fontSize) * 1.4;
+        target.r = 2;
+        target.caret = true;
+      } else {
+        target.follow = true;
+        target.w = 36;
+        target.h = 36;
+        target.r = 18;
+        target.caret = false;
+      }
+      cursor.classList.toggle('is-caret', target.caret);
+    };
+
+    const wake = () => {
+      if (running) return;
+      running = true;
+      requestAnimationFrame(loop);
+    };
 
     document.addEventListener('mousemove', (e) => {
       mx = e.clientX;
       my = e.clientY;
+      wake();
     }, { passive: true });
 
     document.addEventListener('mouseover', (e) => {
-      boxEl = e.target.closest(BOX_SEL);
-      caretEl = boxEl ? null : e.target.closest(TEXT_SEL);
-    });
+      const nextBox = e.target.closest(BOX_SEL);
+      const nextCaret = nextBox ? null : e.target.closest(TEXT_SEL);
+      if (nextBox === boxEl && nextCaret === caretEl) return;
+      boxEl = nextBox;
+      caretEl = nextCaret;
+      measure();
+      wake();
+    }, { passive: true });
+
+    // A pinned box moves with the page, so keep it measured while scrolling —
+    // but defer the measurement to the next frame rather than reading layout
+    // inside the scroll event itself.
+    let remeasure = false;
+    window.addEventListener('scroll', () => {
+      if (!boxEl || remeasure) return;
+      remeasure = true;
+      requestAnimationFrame(() => {
+        remeasure = false;
+        if (!boxEl) return;
+        measure();
+        wake();
+      });
+    }, { passive: true });
+
+    measure();
 
     const lerp = (a, b, t) => a + (b - a) * t;
+    const T = 0.24;
 
-    (function cursorLoop() {
-      let tx = mx;
-      let ty = my;
-      let tw = 36;
-      let th = 36;
-      let tr = 18;
+    function loop() {
+      const tx = target.follow ? mx : target.x;
+      const ty = target.follow ? my : target.y;
 
-      let caretMode = false;
-      if (boxEl && boxEl.isConnected) {
-        const r = boxEl.getBoundingClientRect();
-        tx = r.left + r.width / 2;
-        ty = r.top + r.height / 2;
-        tw = r.width + 14;
-        th = r.height + 14;
-        const br = parseFloat(getComputedStyle(boxEl).borderRadius);
-        tr = Number.isFinite(br) && br > 0 ? Math.min(br + 7, th / 2) : 10;
-      } else if (caretEl && caretEl.isConnected) {
-        tw = 3.5;
-        th = parseFloat(getComputedStyle(caretEl).fontSize) * 1.4;
-        tr = 2;
-        caretMode = true;
-      }
-      cursor.classList.toggle('is-caret', caretMode);
+      cur.x = lerp(cur.x, tx, T);
+      cur.y = lerp(cur.y, ty, T);
+      cur.w = lerp(cur.w, target.w, T);
+      cur.h = lerp(cur.h, target.h, T);
+      cur.r = lerp(cur.r, target.r, T);
 
-      const t = 0.24;
-      cur.x = lerp(cur.x, tx, t);
-      cur.y = lerp(cur.y, ty, t);
-      cur.w = lerp(cur.w, tw, t);
-      cur.h = lerp(cur.h, th, t);
-      cur.r = lerp(cur.r, tr, t);
+      // translate3d keeps the cursor on the compositor; width/height/radius
+      // are only written when they actually changed by a visible amount.
+      cursor.style.transform = `translate3d(${cur.x.toFixed(1)}px, ${cur.y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+      if (Math.abs(cur.w - painted.w) > 0.2) { cursor.style.width = cur.w.toFixed(1) + 'px'; painted.w = cur.w; }
+      if (Math.abs(cur.h - painted.h) > 0.2) { cursor.style.height = cur.h.toFixed(1) + 'px'; painted.h = cur.h; }
+      if (Math.abs(cur.r - painted.r) > 0.2) { cursor.style.borderRadius = cur.r.toFixed(1) + 'px'; painted.r = cur.r; }
 
-      cursor.style.left = cur.x + 'px';
-      cursor.style.top = cur.y + 'px';
-      cursor.style.width = cur.w + 'px';
-      cursor.style.height = cur.h + 'px';
-      cursor.style.borderRadius = cur.r + 'px';
-
-      requestAnimationFrame(cursorLoop);
-    })();
+      // Park the loop once everything has settled; a mousemove wakes it.
+      const settled =
+        Math.abs(cur.x - tx) < 0.15 && Math.abs(cur.y - ty) < 0.15 &&
+        Math.abs(cur.w - target.w) < 0.15 && Math.abs(cur.h - target.h) < 0.15 &&
+        Math.abs(cur.r - target.r) < 0.15;
+      if (settled) { running = false; return; }
+      requestAnimationFrame(loop);
+    }
   }
 
   // magnetic buttons
   if (finePointer) {
     document.querySelectorAll('.btn, .fab').forEach((btn) => {
+      let box = null;
+      let queued = false;
+      let px = 0;
+      let py = 0;
+
+      btn.addEventListener('mouseenter', () => { box = btn.getBoundingClientRect(); }, { passive: true });
       btn.addEventListener('mousemove', (e) => {
-        const r = btn.getBoundingClientRect();
-        const x = (e.clientX - (r.left + r.width / 2)) * 0.2;
-        const y = (e.clientY - (r.top + r.height / 2)) * 0.3;
-        btn.style.transform = `translate(${x}px, ${y}px) scale(1.015)`;
-      });
+        px = e.clientX;
+        py = e.clientY;
+        if (queued) return;
+        queued = true;
+        // One write per frame, and the box is measured on enter rather than
+        // on every move, so the pointer never triggers a layout mid-scroll.
+        requestAnimationFrame(() => {
+          queued = false;
+          if (!box) box = btn.getBoundingClientRect();
+          const x = (px - (box.left + box.width / 2)) * 0.2;
+          const y = (py - (box.top + box.height / 2)) * 0.3;
+          btn.style.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(1.015)`;
+        });
+      }, { passive: true });
       btn.addEventListener('mouseleave', () => {
+        box = null;
         btn.style.transform = '';
-      });
+      }, { passive: true });
     });
   }
 
@@ -299,32 +365,69 @@
     const svg = graphTilt.querySelector('.tiltcard__svg');
     const far = graphTilt.querySelector('.tilt-far');
     const near = graphTilt.querySelector('.tilt-near');
+    let box = null;
+    let queued = false;
+    let cx = 0;
+    let cy = 0;
+
+    graphTilt.addEventListener('mouseenter', () => { box = graphTilt.getBoundingClientRect(); }, { passive: true });
     graphTilt.addEventListener('mousemove', (e) => {
-      const r = graphTilt.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      svg.style.transform = `rotateY(${px * 14}deg) rotateX(${py * -14}deg)`;
-      far.style.transform = `translate(${px * -10}px, ${py * -10}px)`;
-      near.style.transform = `translate(${px * 8}px, ${py * 8}px)`;
-    });
+      cx = e.clientX;
+      cy = e.clientY;
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        if (!box) box = graphTilt.getBoundingClientRect();
+        const px = (cx - box.left) / box.width - 0.5;
+        const py = (cy - box.top) / box.height - 0.5;
+        svg.style.transform = `rotateY(${(px * 14).toFixed(2)}deg) rotateX(${(py * -14).toFixed(2)}deg)`;
+        far.style.transform = `translate(${(px * -10).toFixed(2)}px, ${(py * -10).toFixed(2)}px)`;
+        near.style.transform = `translate(${(px * 8).toFixed(2)}px, ${(py * 8).toFixed(2)}px)`;
+      });
+    }, { passive: true });
     graphTilt.addEventListener('mouseleave', () => {
+      box = null;
       svg.style.transform = '';
       far.style.transform = '';
       near.style.transform = '';
-    });
+    }, { passive: true });
   }
 
   // display mockup: grows gently as it crosses the viewport
   const docDevice = document.getElementById('docDevice');
   if (docDevice && !reduceMotionLab) {
-    const onScroll = () => {
+    let onScreen = false;
+    let queued = false;
+
+    const paint = () => {
+      queued = false;
       const r = docDevice.getBoundingClientRect();
       const mid = r.top + r.height / 2;
       const progress = Math.max(0, 1 - Math.abs(mid - innerHeight / 2) / (innerHeight / 2));
       docDevice.style.transform = `scale(${(0.94 + progress * 0.08).toFixed(4)})`;
     };
+
+    // Reading layout inside the scroll event forces a synchronous reflow on
+    // every wheel tick. Defer to the next frame, and do nothing at all while
+    // the mockup is off screen.
+    const onScroll = () => {
+      if (!onScreen || queued) return;
+      queued = true;
+      requestAnimationFrame(paint);
+    };
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) onScroll();
+      }, { rootMargin: '20% 0px' }).observe(docDevice);
+    } else {
+      onScreen = true;
+    }
+
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    paint();
   }
 
   // the screen zooms under the cursor, slow and smooth, like leaning
@@ -377,12 +480,34 @@
       }
     }, { passive: false });
 
-    (function zoomLoop() {
+    // The loop only runs while the zoom is actually moving. Left running
+    // permanently it would write to the DOM on every frame of every scroll,
+    // for a card that is usually nowhere near the viewport.
+    let zooming = false;
+    const wakeZoom = () => {
+      if (zooming) return;
+      zooming = true;
+      requestAnimationFrame(zoomLoop);
+    };
+
+    function zoomLoop() {
       z += (tz - z) * 0.055; // the "slowly, slowly" part
       screenArt.style.transformOrigin = `${ox.toFixed(1)}% ${oy.toFixed(1)}%`;
       screenArt.style.transform = `scale(${(BASE * z).toFixed(4)})`;
+      if (Math.abs(tz - z) < 0.0005) {
+        z = tz;
+        screenArt.style.transform = `scale(${(BASE * z).toFixed(4)})`;
+        zooming = false;
+        return;
+      }
       requestAnimationFrame(zoomLoop);
-    })();
+    }
+
+    screenZoom.addEventListener('wheel', wakeZoom, { passive: true });
+    screenZoom.addEventListener('mousemove', wakeZoom, { passive: true });
+    screenZoom.addEventListener('mouseleave', wakeZoom, { passive: true });
+    screenZoom.addEventListener('touchmove', wakeZoom, { passive: true });
+    zoomLoop();
   }
 
   // the conversation on the screen: type, answer, cite, repeat
@@ -403,27 +528,64 @@
       chatCites.innerHTML = turns[0].c.map((c) => `<span>${c}</span>`).join('');
       chatA.classList.add('is-in');
     } else {
+      // The conversation only runs while it is actually on screen and the
+      // tab is in front — a typewriter ticking away in a background tab is
+      // pure wasted main-thread work.
       let turn = 0;
+      let timer = null;
+      let typing = null;
+      let onScreen = false;
+      let live = false;
+
+      const stop = () => {
+        clearTimeout(timer);
+        clearInterval(typing);
+        timer = null;
+        typing = null;
+        live = false;
+      };
+
       const playTurn = () => {
         const t = turns[turn % turns.length];
         turn += 1;
         chatQ.textContent = '';
         chatA.classList.remove('is-in');
         let i = 0;
-        const type = setInterval(() => {
+        typing = setInterval(() => {
           chatQ.textContent = t.q.slice(0, ++i);
           if (i >= t.q.length) {
-            clearInterval(type);
-            setTimeout(() => {
+            clearInterval(typing);
+            typing = null;
+            timer = setTimeout(() => {
               chatAText.textContent = t.a;
               chatCites.innerHTML = t.c.map((c) => `<span>${c}</span>`).join('');
               chatA.classList.add('is-in');
-              setTimeout(playTurn, 3600);
+              timer = setTimeout(playTurn, 3600);
             }, 600);
           }
         }, 55);
       };
-      playTurn();
+
+      const sync = () => {
+        const shouldRun = onScreen && !document.hidden;
+        if (shouldRun && !live) {
+          live = true;
+          playTurn();
+        } else if (!shouldRun && live) {
+          stop();
+        }
+      };
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          onScreen = entries[0].isIntersecting;
+          sync();
+        }, { threshold: 0.15 }).observe(chatA.closest('.device') || chatA);
+      } else {
+        onScreen = true;
+      }
+      document.addEventListener('visibilitychange', sync);
+      sync();
     }
   }
 
@@ -432,13 +594,31 @@
   if (dashZoom) {
     const img = dashZoom.querySelector('img');
     if (finePointer) {
+      let box = null;
+      let queued = false;
+      let cx = 0;
+      let cy = 0;
+
       dashZoom.addEventListener('mousemove', (e) => {
-        const r = dashZoom.getBoundingClientRect();
-        img.style.transformOrigin =
-          `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}% ${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`;
-      });
-      dashZoom.addEventListener('mouseenter', () => dashZoom.classList.add('is-zoomed'));
-      dashZoom.addEventListener('mouseleave', () => dashZoom.classList.remove('is-zoomed'));
+        cx = e.clientX;
+        cy = e.clientY;
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          if (!box) box = dashZoom.getBoundingClientRect();
+          img.style.transformOrigin =
+            `${(((cx - box.left) / box.width) * 100).toFixed(1)}% ${(((cy - box.top) / box.height) * 100).toFixed(1)}%`;
+        });
+      }, { passive: true });
+      dashZoom.addEventListener('mouseenter', () => {
+        box = dashZoom.getBoundingClientRect();
+        dashZoom.classList.add('is-zoomed');
+      }, { passive: true });
+      dashZoom.addEventListener('mouseleave', () => {
+        box = null;
+        dashZoom.classList.remove('is-zoomed');
+      }, { passive: true });
     } else {
       dashZoom.addEventListener('click', () => dashZoom.classList.toggle('is-zoomed'));
     }
@@ -481,11 +661,21 @@
   if (greetEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const greetings = ['hi', 'gr\u00fcetzi', 'bonjour'];
     let gi = 0;
+    let greetTimer = null;
+    // Hold the rotation while the tab is hidden rather than queueing up
+    // hundreds of timer callbacks that all fire the moment it comes back.
+    const later = (fn, ms) => {
+      clearTimeout(greetTimer);
+      greetTimer = setTimeout(() => {
+        if (document.hidden) { later(fn, 400); return; }
+        fn();
+      }, ms);
+    };
     const erase = () => {
       const t = greetEl.textContent;
       if (t.length > 0) {
         greetEl.textContent = t.slice(0, -1);
-        setTimeout(erase, 80);
+        later(erase, 80);
       } else {
         gi = (gi + 1) % greetings.length;
         type();
@@ -496,12 +686,12 @@
       const t = greetEl.textContent;
       if (t.length < target.length) {
         greetEl.textContent = target.slice(0, t.length + 1);
-        setTimeout(type, 110);
+        later(type, 110);
       } else {
-        setTimeout(erase, 2800);
+        later(erase, 2800);
       }
     };
-    setTimeout(erase, 3200);
+    later(erase, 3200);
   }
 
   // a real buzz on devices that can do it
@@ -524,6 +714,27 @@
     document.querySelectorAll('a[href*=".html"], a[href="./"]').forEach((a) => {
       a.addEventListener('click', sweep);
     });
+  }
+
+  // Park infinite tile animations while they are scrolled out of view.
+  if ('IntersectionObserver' in window) {
+    const animated = document.querySelectorAll('.workgrid__item, .demo-card, .play__orb');
+    if (animated.length) {
+      const idleObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const idle = !entry.isIntersecting;
+          entry.target.classList.toggle('is-idle', idle);
+          // CSS play-state does not reach SMIL, and the tiles are full of
+          // <animateMotion>. Pause those explicitly.
+          entry.target.querySelectorAll('svg').forEach((svg) => {
+            if (typeof svg.pauseAnimations !== 'function') return;
+            if (idle) svg.pauseAnimations();
+            else svg.unpauseAnimations();
+          });
+        });
+      }, { rootMargin: '25% 0px' });
+      animated.forEach((el) => idleObserver.observe(el));
+    }
   }
 
   // scroll reveal

@@ -45,7 +45,8 @@ body {
 
   /* one cursor, three shapes: orb over nothing, a grey rounded rect
      wrapping tiles/buttons, a text caret over copy. JS lerps the
-     geometry every frame, so no transitions here. */
+     geometry and drives position through transform only, so the cursor
+     rides the compositor instead of relaying out the page each frame. */
   #cursor {
     pointer-events: none;
     z-index: 99999;
@@ -55,9 +56,10 @@ body {
     border-radius: 100%;
     position: fixed;
     top: 0;
-    left: -1000px;
-    transform: translate(-50%, -50%);
+    left: 0;
+    transform: translate3d(-1000px, -1000px, 0) translate(-50%, -50%);
     transition: background 0.2s ease;
+    will-change: transform;
   }
 
   /* text caret turns blue over copy, like a live insertion point */
@@ -230,18 +232,15 @@ p a {
   text-decoration: underline;
 }
 
-a:hover {
-  animation: 10s infinite hueRotate;
-  color: var(--mono-blue);
+/* A hover used to kick off an endless hue-rotate filter animation on the
+   link, which repaints for as long as the pointer rests there. A colour
+   transition reads the same and costs nothing. */
+a {
+  transition: color 0.25s var(--mono-ease);
 }
 
-@keyframes hueRotate {
-  from {
-    filter: hue-rotate(0);
-  }
-  to {
-    filter: hue-rotate(360deg);
-  }
+a:hover {
+  color: var(--mono-blue);
 }
 
 /* about */
@@ -421,6 +420,7 @@ a:hover {
   display: grid;
   width: 100%;
   grid-template-areas:
+    "area-13 area-14"
     "area-1 area-1"
     "area-2 area-5"
     "area-3 area-5"
@@ -435,6 +435,7 @@ a:hover {
 @media (min-width: 48em) {
   .workgrid {
     grid-template-areas:
+      "area-13 area-13 area-14 area-14"
       "area-1 area-1 area-2 area-3"
       "area-5 area-8 area-8 area-4"
       "area-6 area-8 area-8 area-7"
@@ -446,6 +447,7 @@ a:hover {
 @media (min-width: 75em) {
   .workgrid {
     grid-template-areas:
+      "area-13 area-13 area-13 area-14 area-14 area-14"
       "area-1 area-1 area-2 area-3 area-4 area-5"
       "area-6 area-7 area-8 area-8 area-9 area-5"
       "area-6 area-10 area-8 area-8 area-11 area-12";
@@ -472,6 +474,8 @@ a:hover {
 .workgrid__item--10 { grid-area: area-10; }
 .workgrid__item--11 { grid-area: area-11; }
 .workgrid__item--12 { grid-area: area-12; }
+.workgrid__item--13 { grid-area: area-13; }
+.workgrid__item--14 { grid-area: area-14; }
 
 .workgrid__item > a,
 .workgrid__item > div {
@@ -523,8 +527,10 @@ a:hover {
 }
 
 .workgrid__item a:hover .workgrid__item__content {
-  filter: blur(24px);
-  transform: scale(1.5);
+  /* 24px was blurring a full-bleed image on every tile hover; 14px reads the
+     same behind the caption and is markedly cheaper to paint. */
+  filter: blur(14px);
+  transform: scale(1.35);
 }
 
 .workgrid__item__content img {
@@ -1005,6 +1011,13 @@ a:hover {
   font-size: 0.95rem;
 }
 
+/* Tiles keep several infinite animations running. Off screen they are
+   invisible but still repainting, so the observer parks them. */
+.is-idle,
+.is-idle * {
+  animation-play-state: paused !important;
+}
+
 /* reveal on scroll */
 .reveal-init {
   opacity: 0;
@@ -1039,8 +1052,8 @@ a:hover {
     transform: none;
     transition: none;
   }
-  a:hover {
-    animation: none;
+  a {
+    transition: none;
   }
 }
 
@@ -1069,6 +1082,13 @@ a:hover {
 
 .xp {
   padding-bottom: 4.5em;
+  /* Each experiment is a tall block of SVG, gradients and infinite
+     animations. Skipping layout and paint for the ones that are off screen
+     is what keeps this page scrolling at frame rate; `auto` on the intrinsic
+     size means the browser remembers each real height after first render, so
+     the scrollbar does not jump on the way back up. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 .xp__kicker {
@@ -1609,16 +1629,19 @@ a:hover {
     radial-gradient(130% 100% at 78% 85%, rgba(124, 92, 255, 0.95), transparent 58%),
     radial-gradient(110% 90% at 22% 82%, rgba(46, 230, 168, 0.9), transparent 55%),
     conic-gradient(from 210deg at 55% 45%, #00e0ff, #b48aff, #ff4fa0, #ffe07a, #7ad7a0, #00e0ff);
+  /* The blur is painted once. Animating `filter` here re-ran a 16px gaussian
+     over the whole gradient stack every frame; drifting the transform instead
+     is a compositor-only job and looks the same. */
   filter: saturate(1.4) blur(16px);
   transform: scale(1.15);
   transform-origin: 50% 50%;
   will-change: transform;
-  animation: artDrift 14s ease-in-out infinite alternate;
+  animation: artDrift 18s ease-in-out infinite alternate;
 }
 
 @keyframes artDrift {
   to {
-    filter: saturate(1.4) blur(16px) hue-rotate(70deg);
+    transform: scale(1.24) translate3d(-3%, 2%, 0) rotate(6deg);
   }
 }
 
