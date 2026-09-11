@@ -498,9 +498,8 @@
   <section class="speaking demos">
     <h1>Live</h1>
     <p class="section__lead">
-      Running deployments, not screenshots of things that once worked. Each
-      rebuilds itself from the code &mdash; so if a pipeline breaks, the page
-      breaks with it.
+      Five things you can open and click, not just read about. Every screenshot
+      below goes to the running version.
     </p>
 
     <ul class="demo-grid">
@@ -644,14 +643,49 @@
   </section>
 
   <!-- write -->
-  <section class="words">
+  <section class="words" id="write">
     <h1>Write</h1>
     <p class="section__lead">
-      Most of my projects end up with a long README &mdash; what broke,
-      what fixed it, the numbers. A book chapter and a few of those below.
+      Three write-ups on projects where the interesting part was a result I
+      didn&rsquo;t expect, plus a published book chapter.
     </p>
 
     <ul class="words__samples">
+      <li class="words__samples__item">
+        <a href="writing/forecasting-baselines.html">
+          <div class="tile tile--4to3">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M10 46 L22 34 L32 40 L44 22 L54 28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 52 L54 16" fill="none" stroke="#008fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 4"/>
+            </svg>
+          </div>
+          <p>I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.</p>
+        </a>
+      </li>
+      <li class="words__samples__item">
+        <a href="writing/smb-growth-intelligence.html">
+          <div class="tile tile--4to3">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="12" y="16" width="40" height="10" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+              <rect x="12" y="30" width="40" height="10" rx="2" fill="none" stroke="#fff" stroke-width="2"/>
+              <rect x="12" y="44" width="26" height="10" rx="2" fill="none" stroke="#008fff" stroke-width="2"/>
+            </svg>
+          </div>
+          <p>What 541,909 real invoices taught me about honest data pipelines</p>
+        </a>
+      </li>
+      <li class="words__samples__item">
+        <a href="writing/geometry-dash-rl.html">
+          <div class="tile tile--4to3">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 44 H52" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+              <rect x="17" y="26" width="12" height="12" rx="2" fill="#008fff"/>
+              <path d="M35 44 L43 26 L51 44 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <p>Teaching an AI to play a game that kills you instantly</p>
+        </a>
+      </li>
       <li class="words__samples__item">
         <a href="https://github.com/abs768/Plant-Disease-Classification-Using-Densenet-169-Architecture-of-CNN" target="_blank" rel="noopener noreferrer">
           <div class="tile tile--4to3">
@@ -663,36 +697,14 @@
           <p>Deep-learning plant disease classification &mdash; a published book chapter</p>
         </a>
       </li>
-      <li class="words__samples__item">
-        <a href="https://github.com/abs768/PaperTrail#readme" target="_blank" rel="noopener noreferrer">
-          <div class="tile tile--4to3">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="2"/>
-              <circle cx="44" cy="40" r="6" fill="none" stroke="#fff" stroke-width="2"/>
-              <path d="M28 28l12 8" stroke="#008fff" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <p>Fighting fabricated citations with fuzzy-match filters</p>
-        </a>
-      </li>
-      <li class="words__samples__item">
-        <a href="https://github.com/abs768/intelligent-doc-rag#readme" target="_blank" rel="noopener noreferrer">
-          <div class="tile tile--4to3">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <rect x="14" y="18" width="36" height="28" rx="4" fill="none" stroke="#fff" stroke-width="2"/>
-              <circle cx="44" cy="20" r="7" fill="#f0326e"/>
-            </svg>
-          </div>
-          <p>Why your documents should never leave your machine</p>
-        </a>
-      </li>
     </ul>
 
     <div class="words__drawer" id="drawer">
       <ul class="words__extended">
         <li><a href="https://github.com/abs768/forensic-llm-wiki-obsidian" target="_blank" rel="noopener noreferrer">Forensic LLM Wiki &mdash; case notes into timelines, IOCs, and contradictions</a></li>
         <li><a href="https://github.com/abs768/MarketPulse-Real-Time-Stock-Pipeline" target="_blank" rel="noopener noreferrer">MarketPulse &mdash; 3k records/sec through Kafka into Snowflake</a></li>
-        <li><a href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener noreferrer">Teaching an AI to play the real Geometry Dash &mdash; sim-to-real RL</a></li>
+        <li><a href="https://github.com/abs768/PaperTrail#readme" target="_blank" rel="noopener noreferrer">PaperTrail &mdash; fighting fabricated citations with fuzzy-match filters</a></li>
+        <li><a href="https://github.com/abs768/intelligent-doc-rag#readme" target="_blank" rel="noopener noreferrer">DocGPT &mdash; why your documents should never leave your machine</a></li>
         <li><a href="https://github.com/abs768/Robust-Image-Classification-with-MC-Dropout-Tri-Gating-and-SVHN-Calibrated-OOD-Thresholds" target="_blank" rel="noopener noreferrer">Robust image classification with MC dropout and OOD thresholds</a></li>
 
       </ul>
@@ -712,9 +724,9 @@
       <div class="play__content">
         <h1>Play</h1>
         <p>
-          I&rsquo;m driven by curiosity &mdash; teaching an AI to beat the real
-          Geometry Dash, building voice assistants, benchmarking local LLMs,
-          and the occasional spaceship battle game.
+          Things I built to find out whether they&rsquo;d work: an AI that plays the
+          real Geometry Dash, voice assistants, local LLM benchmarks, and one
+          spaceship battle game.
         </p>
         <a class="btn btn--margin" href="experiments.html" target="_blank" rel="noopener">
           <span class="btn__icon">&rarr;</span> explore

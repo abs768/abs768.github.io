@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<!-- (c) 2026 Bhavani Shankar Ajith. All rights reserved. Viewing is permitted; reuse is not. See /LICENSE. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What 541,909 real invoices taught me about honest data pipelines &middot; Bhavani S.</title>
+
+  <meta name="description" content="Building an analytics-engineering platform on real UK ecommerce data: layered SQL marts, a point-in-time feature store with a build-time leakage guard, and what to do with the 25% of rows that have no customer id.">
+  <meta name="author" content="Bhavani Shankar Ajith">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What 541,909 real invoices taught me about honest data pipelines">
+  <meta property="og:description" content="Building an analytics-engineering platform on real UK ecommerce data: layered SQL marts, a point-in-time feature store with a build-time leakage guard, and what to do with the 25% of rows that have no customer id.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/read.css?v=20260910a">
+</head>
+
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="masthead__name" href="../">bhavani s.</a>
+      <a class="masthead__back" href="../#write">&larr; all writing</a>
+    </div>
+  </header>
+
+  <article class="post">
+    <p class="post__kicker">Analytics engineering &middot; Data quality</p>
+    <h1>What 541,909 real invoices taught me about honest data pipelines</h1>
+    <p class="post__standfirst">A quarter of the rows had no customer id. What you do with those rows is the project &mdash; not the SQL, and not the model.</p>
+
+    <div class="post__byline">
+      <span class="post__avatar" aria-hidden="true">BA</span>
+      <span>
+        <span class="post__who">Bhavani Shankar Ajith</span><br>
+        <span class="post__meta">4 min read &middot; SMB Growth Intelligence</span>
+      </span>
+    </div>
+
+    <p>
+      The UCI Online Retail dataset is 541,909 line items from a real UK online retailer
+      over about a year. It is a good dataset to build on for exactly the reason it is
+      an annoying one to build on: roughly a quarter of the rows have no customer id.
+    </p>
+
+    <p>
+      Guest checkouts. Cancellations. Prices that make no sense. Nothing about it is
+      clean, and every decision you make about those rows changes the numbers you end up
+      reporting. That is the whole project, really &mdash; not the SQL, and not the
+      model, but what you do with the rows that do not fit.
+    </p>
+
+    <h2>The quarter of the data that does not cooperate</h2>
+
+    <p>
+      134,737 rows &mdash; <strong>24.9%</strong> &mdash; cannot be attributed to a
+      customer. You have three options and they are not equally honest.
+    </p>
+
+    <p>
+      You can drop them silently, and report revenue that is missing a quarter of its
+      transactions without saying so. You can invent surrogate ids, and produce a cohort
+      analysis where a million one-time strangers look like a retention catastrophe. Or
+      you can quarantine them: keep them, count them, exclude them from
+      customer-level models, and publish the exclusion rate as a number people can see.
+    </p>
+
+    <p>
+      I quarantined them, and the quarantine rate is tracked as a bounded service level
+      rather than buried. If it moves, the pipeline says so.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat__v">541,909</div><div class="stat__k">line items ingested</div></div>
+      <div class="stat"><div class="stat__v">392,690</div><div class="stat__k">valid sale lines modelled</div></div>
+      <div class="stat"><div class="stat__v">24.9%</div><div class="stat__k">quarantined, and reported</div></div>
+      <div class="stat"><div class="stat__v">11/11</div><div class="stat__k">quality assertions passing</div></div>
+    </div>
+
+    <h2>Layered SQL, because marts should be boring</h2>
+
+    <p>
+      The pipeline is staging &rarr; intermediate &rarr; marts, run on DuckDB locally and
+      written so the modelling logic ports to BigQuery without a rewrite. Ten models,
+      100% pipeline success, about ten milliseconds at the median.
+    </p>
+
+    <p>
+      The marts exist to answer questions somebody would actually ask, and the answers
+      are specific because the data is real:
+    </p>
+
+    <div class="figure">
+      <div class="table-wrap">
+      <table>
+        <thead><tr><th>Question</th><th>What the data said</th></tr></thead>
+        <tbody>
+          <tr><td>Who are the high-value customers?</td><td>1,380 &ldquo;Champions&rdquo; drive &pound;6.7M</td></tr>
+          <tr><td>Which markets matter?</td><td>UK is 82% of revenue</td></tr>
+          <tr><td>Which products get returned?</td><td>some at ~100% &mdash; cancelled bulk orders</td></tr>
+          <tr><td>Who will buy again?</td><td>ranked at 0.73 ROC-AUC</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="figure__cap">Four marts, four decisions. The ~100% return rates were a genuine find.</p>
+    </div>
+
+    <p>
+      That last row is my favourite. A product with a 100% return rate looks like a data
+      bug until you look: they are cancelled bulk orders, which are real events that
+      belong in the data and would quietly distort product performance if you averaged
+      over them without noticing.
+    </p>
+
+    <h2>A feature store that refuses to look forward</h2>
+
+    <p>
+      Features are declared in YAML, not written as pipeline code:
+    </p>
+
+    <pre><code>- name: revenue_last_90d
+  aggregation: sum
+  column: line_revenue
+  window_days: 90</code></pre>
+
+    <p>
+      The framework turns that into point-in-time-correct SQL, backfills it across
+      cut-offs, and attaches the forward label. The rule it enforces is simple and it is
+      the one that matters: features may read only <code>invoice_ts &lt;= as_of</code>,
+      and the label &mdash; did this customer order again in the next 90 days? &mdash;
+      may read only the window <em>after</em> <code>as_of</code>.
+    </p>
+
+    <p>
+      A build-time assertion fails the run on any violation. Not a code review convention.
+      A failing build.
+    </p>
+
+    <div class="note">
+      <p>
+        <strong>Why this is worth the machinery.</strong> Point-in-time correctness is the
+        single easiest thing to get wrong in a feature store and the single hardest to
+        notice afterwards, because the symptom is a model that looks great offline and
+        disappoints in production. Making it a build failure is cheaper than making it a
+        postmortem.
+      </p>
+    </div>
+
+    <h2>The model, and its actual margin</h2>
+
+    <p>
+      A walk-forward repeat-purchase model reaches <strong>0.731 ROC-AUC against a 0.684
+      baseline</strong>. That is a real improvement of about five points, and it is worth
+      being precise about what five points buys: better ordering of a re-engagement list,
+      not a different business.
+    </p>
+
+    <p>
+      The scores are written back into the warehouse next to the RFM segments, which is
+      the part that makes it useful. A propensity score sitting in a notebook is a
+      number; a propensity score joined to an &ldquo;At Risk&rdquo; segment in a mart is
+      a call list.
+    </p>
+
+    <h2>Quality as data, not as vibes</h2>
+
+    <p>
+      Row counts, freshness, nulls, uniqueness, ranges, reconciliation, referential
+      integrity &mdash; all declared in YAML, all written to an append-only audit table
+      so quality can be trended rather than merely checked. A critical breach fails CI.
+    </p>
+
+    <p>
+      The entire thing runs end to end in about fifteen seconds, of which fourteen are
+      downloading the data. Which is the point: if reproducing the whole pipeline is
+      cheap, you run it on every push, and the dashboard shows you a real execution
+      instead of a committed snapshot from the day it worked.
+    </p>
+
+    <h2>What I would keep</h2>
+
+    <p>
+      The quarantine table, the build-time leakage assertion, and the habit of publishing
+      the exclusion rate. Those three are what let me put a revenue number on a page and
+      still be able to explain exactly which rows are behind it.
+    </p>
+
+    <div class="post__end">
+      <p>The dashboard is rebuilt by running the pipeline end to end on a clean runner, so the numbers on it are a real execution rather than a committed snapshot.</p>
+      <div class="post__links">
+        <a href="https://abs768.github.io/smb-growth-intelligence/" target="_blank" rel="noopener">Live dashboard &rarr;</a>
+        <a href="https://github.com/abs768/smb-growth-intelligence" target="_blank" rel="noopener">Source</a>
+      </div>
+    </div>
+  </article>
+
+  <nav class="more">
+    <h2>More writing</h2>
+    <ul>
+      <li><a href="forecasting-baselines.html">
+        <span class="more__t">I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.</span>
+        <span class="more__d">Forecasting Baselines</span>
+      </a></li>
+      <li><a href="geometry-dash-rl.html">
+        <span class="more__t">Teaching an AI to play a game that kills you instantly</span>
+        <span class="more__d">Geometry Dash RL</span>
+      </a></li>
+    </ul>
+  </nav>
+
+  <script>
+    // A thin progress rule. Transform-only and rAF-batched, so scrolling stays cheap.
+    (function () {
+      var bar = document.getElementById('progress');
+      if (!bar) return;
+      var queued = false;
+      var paint = function () {
+        queued = false;
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(window.scrollY / h, 1) : 0).toFixed(4) + ')';
+      };
+      window.addEventListener('scroll', function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(paint);
+      }, { passive: true });
+      paint();
+    })();
+  </script>
+</body>
+</html>

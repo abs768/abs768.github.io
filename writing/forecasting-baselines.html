@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- (c) 2026 Bhavani Shankar Ajith. All rights reserved. Viewing is permitted; reuse is not. See /LICENSE. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won. &middot; Bhavani S.</title>
+
+  <meta name="description" content="A leakage-safe walk-forward benchmark of naive, moving-average, Ridge, XGBoost and LSTM forecasters over sixteen years of real market data. None beat the random walk, and that is the correct result.">
+  <meta name="author" content="Bhavani Shankar Ajith">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.">
+  <meta property="og:description" content="A leakage-safe walk-forward benchmark of naive, moving-average, Ridge, XGBoost and LSTM forecasters over sixteen years of real market data. None beat the random walk, and that is the correct result.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/read.css?v=20260910a">
+</head>
+
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="masthead__name" href="../">bhavani s.</a>
+      <a class="masthead__back" href="../#write">&larr; all writing</a>
+    </div>
+  </header>
+
+  <article class="post">
+    <p class="post__kicker">Time series &middot; Honest baselines</p>
+    <h1>I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.</h1>
+    <p class="post__standfirst">Five models, twenty stocks, sixteen years of real market data &mdash; and the one-line baseline came first. Why that is the right answer, and what it takes to trust it.</p>
+
+    <div class="post__byline">
+      <span class="post__avatar" aria-hidden="true">BA</span>
+      <span>
+        <span class="post__who">Bhavani Shankar Ajith</span><br>
+        <span class="post__meta">3 min read &middot; Forecasting Baselines</span>
+      </span>
+    </div>
+
+    <p>
+      Every forecasting project has a moment where you have to decide what counts as
+      success. I picked mine before I ran anything: beat <em>&ldquo;tomorrow&rsquo;s price is
+      today&rsquo;s price&rdquo;</em> on RMSE. That is the naive random walk, it takes one line
+      to implement, and it is the thing a next-day price forecaster has to be better
+      than to be worth anything at all.
+    </p>
+
+    <p>
+      Five models, twenty stocks, sixteen years of real market data. None of them beat it.
+    </p>
+
+    <p>
+      That is the result, and it is the honest one. Here is why I think it is more
+      useful than a tuned number would have been.
+    </p>
+
+    <h2>The setup</h2>
+
+    <p>
+      Twenty equities from 2009 to 2025 via yfinance, plus the ten-year Treasury yield
+      from FRED. Five forecasters sharing one interface: naive, moving average, linear
+      (Ridge), XGBoost, and an LSTM. Evaluation is expanding-window walk-forward across
+      six folds &mdash; train on everything before a cut-off, score the days after it,
+      move the cut-off forward, repeat.
+    </p>
+
+    <p>
+      Two design choices did most of the work. The models forecast next-day
+      <strong>return</strong> and reconstruct the price level from it, so their RMSE is
+      measured on the same scale as the random walk rather than on a differently-shaped
+      target. And the no-leakage property is enforced by a test, not by my own care:
+      training data is always strictly earlier than the scored days, and the suite fails
+      if that ever stops being true.
+    </p>
+
+    <h2>The results</h2>
+
+    <div class="figure">
+      <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Model</th><th>RMSE</th><th>MAE</th><th>Dir. acc</th><th>vs naive</th></tr>
+        </thead>
+        <tbody>
+          <tr class="is-key"><td>naive (random walk)</td><td>2.410</td><td>1.355</td><td>&mdash;</td><td>&plusmn;0.00%</td></tr>
+          <tr><td>linear (Ridge)</td><td>2.414</td><td>1.355</td><td>51.9%</td><td>&minus;0.17%</td></tr>
+          <tr><td>LSTM</td><td>2.493</td><td>1.404</td><td>48.7%</td><td>&minus;3.46%</td></tr>
+          <tr><td>XGBoost</td><td>2.693</td><td>1.582</td><td>51.3%</td><td>&minus;11.75%</td></tr>
+          <tr><td>moving average</td><td>3.509</td><td>2.047</td><td>50.6%</td><td>&minus;45.63%</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="figure__cap">Six walk-forward folds, averaged. Lower RMSE is better.</p>
+    </div>
+
+    <p>
+      Read the ordering, because it is not random. The simplest model loses by the least.
+      Ridge is within a fifth of a percent of the random walk. The LSTM &mdash; the most
+      expressive thing in the table &mdash; is three and a half percent worse. XGBoost is
+      twelve percent worse. The moving average, which is the only model here that is
+      structurally wrong about what prices do, is off by forty-five.
+    </p>
+
+    <blockquote>
+      <p>
+        Model capacity did not buy accuracy. It bought variance, and the walk-forward
+        split made me pay for it.
+      </p>
+    </blockquote>
+
+    <h2>Why this is the expected answer</h2>
+
+    <p>
+      Daily equity prices are close to a martingale. If a simple model could reliably
+      predict tomorrow&rsquo;s close from today&rsquo;s, the prediction would be traded away
+      until it stopped working. A benchmark that says otherwise is usually measuring its
+      own leakage.
+    </p>
+
+    <p>
+      Which is exactly why the result is worth publishing. The failure mode in this
+      corner of ML is not that people cannot fit a model &mdash; it is that a small
+      lookahead bug produces a beautiful number, and nobody checks it because the number
+      is what everyone wanted. Reporting the null result is how you show the pipeline is
+      not lying to you.
+    </p>
+
+    <h2>Where the signal actually was</h2>
+
+    <p>
+      RMSE is not the only question. Ridge matches the random walk on error while getting
+      <strong>51.9% directional accuracy</strong> &mdash; above chance. That gap matters:
+      knowing the sign of tomorrow&rsquo;s move is a different, easier, and more
+      economically interesting problem than knowing its magnitude.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat__v">51.9%</div><div class="stat__k">directional accuracy, Ridge</div></div>
+      <div class="stat"><div class="stat__v">6</div><div class="stat__k">expanding-window folds</div></div>
+      <div class="stat"><div class="stat__v">20</div><div class="stat__k">equities, 2009&ndash;2025</div></div>
+      <div class="stat"><div class="stat__v">15</div><div class="stat__k">tests, incl. leakage guards</div></div>
+    </div>
+
+    <p>
+      The volatility-regime breakdown says something similar. Relative model behaviour
+      changes with the regime, so a single averaged leaderboard row hides more than it
+      shows. A model that is mediocre on average can be the right one in a specific
+      regime, and you only find that out if you cut the results that way.
+    </p>
+
+    <div class="note">
+      <p>
+        <strong>Where the work actually went.</strong> Not the LSTM. The walk-forward
+        harness, the return-space target, and the test that fails the build if training
+        data ever overlaps a scored day. Those are what make a null result trustworthy
+        enough to publish.
+      </p>
+    </div>
+
+    <h2>What I took away</h2>
+
+    <p>
+      Pick the baseline before you pick the model. If you cannot say in one sentence what
+      you must beat, you will end up grading your own homework.
+    </p>
+
+    <p>
+      And when the baseline wins, say so in the headline. The results page for this
+      project opens with &ldquo;the random walk is not beaten&rdquo; &mdash; not because
+      negativity is a virtue, but because a benchmark that can only produce good news is
+      not a benchmark.
+    </p>
+
+    <div class="post__end">
+      <p>The benchmark rebuilds itself from the code on every push, so the results page always reflects the current run rather than a screenshot of a good day.</p>
+      <div class="post__links">
+        <a href="https://abs768.github.io/forecasting-baselines/" target="_blank" rel="noopener">Live results &rarr;</a>
+        <a href="https://github.com/abs768/forecasting-baselines" target="_blank" rel="noopener">Source</a>
+      </div>
+    </div>
+  </article>
+
+  <nav class="more">
+    <h2>More writing</h2>
+    <ul>
+      <li><a href="smb-growth-intelligence.html">
+        <span class="more__t">What 541,909 real invoices taught me about honest data pipelines</span>
+        <span class="more__d">SMB Growth Intelligence</span>
+      </a></li>
+      <li><a href="geometry-dash-rl.html">
+        <span class="more__t">Teaching an AI to play a game that kills you instantly</span>
+        <span class="more__d">Geometry Dash RL</span>
+      </a></li>
+    </ul>
+  </nav>
+
+  <script>
+    // A thin progress rule. Transform-only and rAF-batched, so scrolling stays cheap.
+    (function () {
+      var bar = document.getElementById('progress');
+      if (!bar) return;
+      var queued = false;
+      var paint = function () {
+        queued = false;
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(window.scrollY / h, 1) : 0).toFixed(4) + ')';
+      };
+      window.addEventListener('scroll', function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(paint);
+      }, { passive: true });
+      paint();
+    })();
+  </script>
+</body>
+</html>

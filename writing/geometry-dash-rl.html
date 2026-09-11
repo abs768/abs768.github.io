@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!-- (c) 2026 Bhavani Shankar Ajith. All rights reserved. Viewing is permitted; reuse is not. See /LICENSE. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching an AI to play a game that kills you instantly &middot; Bhavani S.</title>
+
+  <meta name="description" content="Reinforcement-learning agents for Geometry Dash, trained in a headless simulator running 2,500x real time and deployed to the retail game through a C++ mod. A controlled DQN/PPO/GA comparison, domain randomization, and an honest account of the full level clear.">
+  <meta name="author" content="Bhavani Shankar Ajith">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Teaching an AI to play a game that kills you instantly">
+  <meta property="og:description" content="Reinforcement-learning agents for Geometry Dash, trained in a headless simulator running 2,500x real time and deployed to the retail game through a C++ mod. A controlled DQN/PPO/GA comparison, domain randomization, and an honest account of the full level clear.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/read.css?v=20260910a">
+</head>
+
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="masthead__name" href="../">bhavani s.</a>
+      <a class="masthead__back" href="../#write">&larr; all writing</a>
+    </div>
+  </header>
+
+  <article class="post">
+    <p class="post__kicker">Reinforcement learning &middot; Sim-to-real</p>
+    <h1>Teaching an AI to play a game that kills you instantly</h1>
+    <p class="post__standfirst">One button, instant death, and a game that runs at 60 fps. The interesting problem was not the agent &mdash; it was refusing to train inside the thing I was training for.</p>
+
+    <div class="post__byline">
+      <span class="post__avatar" aria-hidden="true">BA</span>
+      <span>
+        <span class="post__who">Bhavani Shankar Ajith</span><br>
+        <span class="post__meta">4 min read &middot; Geometry Dash RL</span>
+      </span>
+    </div>
+
+    <p>
+      Geometry Dash is one button. You jump, or you do not. Touch anything and you die
+      instantly and restart from the beginning. That combination &mdash; trivial action
+      space, zero tolerance, precise timing &mdash; makes it a much better reinforcement
+      learning testbed than it has any right to be.
+    </p>
+
+    <p>
+      The catch is that the game runs at 60 frames per second, and an agent that learns
+      inside it learns at 60 frames per second. Prior work does exactly that, and the
+      speed of the game becomes the speed of research.
+    </p>
+
+    <h2>Decouple training from the thing you are training for</h2>
+
+    <p>
+      So I did not train in the game. I wrote a headless simulator of its physics
+      &mdash; all seven gamemodes, slopes, gravity and speed portals &mdash; where
+      <code>step()</code> is a pure function of state, action and level. It runs at about
+      <strong>2,500&times; real time</strong>, measured at 147k&ndash;163k steps per
+      second on a single CPU core.
+    </p>
+
+    <p>
+      The retail game then becomes the <em>evaluation</em> target rather than the
+      training loop. A C++ mod hooks the game&rsquo;s update call, streams state out and
+      injects input back over a binary socket. Agents observe structured state &mdash;
+      player kinematics plus a look-ahead occupancy grid &mdash; not pixels, which is
+      dramatically more sample-efficient and means the sim and the real game can hand the
+      policy identical inputs.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat__v">~2,500&times;</div><div class="stat__k">real-time sim speed</div></div>
+      <div class="stat"><div class="stat__v">3 &times; 5</div><div class="stat__k">algorithms &times; seeds, controlled</div></div>
+      <div class="stat"><div class="stat__v">48</div><div class="stat__k">tests, including the bridge</div></div>
+      <div class="stat"><div class="stat__v">90.7%</div><div class="stat__k">behaviour-cloning val accuracy</div></div>
+    </div>
+
+    <h2>The finding I did not expect</h2>
+
+    <p>
+      I ran a controlled comparison &mdash; three algorithms, five seeds, two levels,
+      identical observations and rewards. DQN, PPO, and a genetic algorithm.
+    </p>
+
+    <p>
+      PPO, the modern default, got stuck. In four of five seeds it settled into a local
+      optimum where it simply refused the first risky jump, because attempting it and
+      failing cost reward. DQN and the genetic algorithm both sidestepped that trap and
+      cleared the levels.
+    </p>
+
+    <blockquote>
+      <p>
+        A five-fold increase in the entropy coefficient is what got PPO out. A
+        single-algorithm project would have concluded the task was hard.
+      </p>
+    </blockquote>
+
+    <p>
+      That is the argument for bake-offs in miniature. If I had only run PPO, the honest
+      write-up would have been &ldquo;RL struggles on this task&rdquo;, and it would have
+      been wrong. The problem was not the task. It was one hyper-parameter interacting
+      with a reward structure that punishes exploration.
+    </p>
+
+    <h2>Crossing the gap to the real game</h2>
+
+    <p>
+      A policy trained only in the simulator, driving the retail game, reaches about 11%
+      before dying at an obstacle where the sim and the real physics disagree. That
+      number is the sim-to-real gap made concrete.
+    </p>
+
+    <p>
+      The standard fix is domain randomization: vary the physics constants every episode
+      so the policy learns to tolerate a range instead of memorising a point. Trained
+      with and without &plusmn;18% randomization across five seeds, then evaluated on
+      held-out physics perturbations, it widens the tolerance band by
+      <strong>1.60&times; on jump strength and 1.67&times; on horizontal speed</strong>
+      &mdash; and degrades gracefully where the point-estimate policy falls off a cliff.
+    </p>
+
+    <div class="note">
+      <p>
+        <strong>The bit I would reuse anywhere.</strong> The bridge is tested without the
+        game. A protocol-faithful mock backed by the simulator exercises the entire
+        Python-to-game path, and sim-versus-bridge observations match to float32
+        precision. You can verify the plumbing on a machine that does not own a copy of
+        Geometry Dash.
+      </p>
+    </div>
+
+    <h2>Being precise about the full clear</h2>
+
+    <p>
+      The project does clear a complete official level. It is important to say exactly
+      how, because the honest version is less impressive than the headline and more
+      useful than a vague one.
+    </p>
+
+    <p>
+      The full clear is <strong>learning from demonstration</strong> &mdash; a recorded
+      human run, replayed deterministically on the real game. It is not autonomous RL
+      solving the level end to end. A policy trained by behaviour cloning on that
+      demonstration predicts the human&rsquo;s jumps at 90.7% validation accuracy, with a
+      jump F1 of 0.82, and a checkpoint search on the real game clears the full cube
+      section at about 35%.
+    </p>
+
+    <p>
+      Those are three different claims with three different strengths, and collapsing
+      them into &ldquo;an AI beat Geometry Dash&rdquo; would be the kind of sentence that
+      falls apart in the first follow-up question.
+    </p>
+
+    <h2>What transfers to work that is not a game</h2>
+
+    <p>
+      Build the fast simulator. Compare more than one algorithm before concluding
+      anything about the problem. Randomize what you are uncertain about. Test the
+      integration layer against a mock so it is not the thing that breaks at 2am. And
+      separate what the system did from what you would like to say it did.
+    </p>
+
+    <div class="post__end">
+      <p>Everything in the sim reproduces from a seeded sweep; the real-game results need a copy of the game and the mod, and the write-up marks which is which.</p>
+      <div class="post__links">
+        <a href="https://abs768.github.io/geometry-dash-rl/" target="_blank" rel="noopener">Project page &rarr;</a>
+        <a href="https://github.com/abs768/geometry-dash-rl" target="_blank" rel="noopener">Source</a>
+      </div>
+    </div>
+  </article>
+
+  <nav class="more">
+    <h2>More writing</h2>
+    <ul>
+      <li><a href="smb-growth-intelligence.html">
+        <span class="more__t">What 541,909 real invoices taught me about honest data pipelines</span>
+        <span class="more__d">SMB Growth Intelligence</span>
+      </a></li>
+      <li><a href="forecasting-baselines.html">
+        <span class="more__t">I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.</span>
+        <span class="more__d">Forecasting Baselines</span>
+      </a></li>
+    </ul>
+  </nav>
+
+  <script>
+    // A thin progress rule. Transform-only and rAF-batched, so scrolling stays cheap.
+    (function () {
+      var bar = document.getElementById('progress');
+      if (!bar) return;
+      var queued = false;
+      var paint = function () {
+        queued = false;
+        var h = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.transform = 'scaleX(' + (h > 0 ? Math.min(window.scrollY / h, 1) : 0).toFixed(4) + ')';
+      };
+      window.addEventListener('scroll', function () {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(paint);
+      }, { passive: true });
+      paint();
+    })();
+  </script>
+</body>
+</html>
