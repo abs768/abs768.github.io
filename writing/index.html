@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!-- (c) 2026 Bhavani Shankar Ajith. All rights reserved. Viewing is permitted; reuse is not. See /LICENSE. -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing &middot; Bhavani S.</title>
+
+  <meta name="description" content="Write-ups on projects where the interesting part was a result I did not expect — a random walk that would not be beaten, a quarter of the rows with no customer id, and an RL agent that refused to jump.">
+  <meta name="author" content="Bhavani Shankar Ajith">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Writing &middot; Bhavani S.">
+  <meta property="og:description" content="Write-ups on projects where the interesting part was a result I did not expect.">
+
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/read.css?v=20260911b">
+</head>
+
+<body>
+  <header class="masthead">
+    <div class="masthead__inner">
+      <a class="masthead__name" href="../">bhavani s.</a>
+      <a class="masthead__back" href="../">portfolio &rarr;</a>
+    </div>
+  </header>
+
+  <section class="pub">
+    <h1 class="pub__title">Writing</h1>
+    <p class="pub__tagline">
+      Longer notes on projects where the interesting part was a result I
+      didn&rsquo;t expect &mdash; and what it took to trust it.
+    </p>
+  </section>
+
+  <main class="feed">
+    <article class="feed__item">
+      <a href="forecasting-baselines.html">
+        <div>
+          <p class="feed__kicker">Time series &middot; Honest baselines</p>
+          <h2 class="feed__title">I benchmarked five forecasters against &ldquo;tomorrow = today&rdquo;. It won.</h2>
+          <p class="feed__deck">
+            Five models, twenty stocks, sixteen years of real market data &mdash; and the
+            one-line baseline came first. Why that is the right answer, and what it takes
+            to trust it.
+          </p>
+          <p class="feed__meta">3 min read &middot; Forecasting Baselines</p>
+        </div>
+        <div class="feed__thumb" aria-hidden="true">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 48 L22 34 L32 40 L44 22 L56 28" fill="none" stroke="#242424" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 54 L56 14" fill="none" stroke="#0066cc" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5"/>
+          </svg>
+        </div>
+      </a>
+    </article>
+
+    <article class="feed__item">
+      <a href="smb-growth-intelligence.html">
+        <div>
+          <p class="feed__kicker">Analytics engineering &middot; Data quality</p>
+          <h2 class="feed__title">What 541,909 real invoices taught me about honest data pipelines</h2>
+          <p class="feed__deck">
+            A quarter of the rows had no customer id. What you do with those rows is the
+            project &mdash; not the SQL, and not the model.
+          </p>
+          <p class="feed__meta">4 min read &middot; SMB Growth Intelligence</p>
+        </div>
+        <div class="feed__thumb" aria-hidden="true">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="14" width="44" height="11" rx="2" fill="none" stroke="#242424" stroke-width="2.5"/>
+            <rect x="10" y="29" width="44" height="11" rx="2" fill="none" stroke="#242424" stroke-width="2.5"/>
+            <rect x="10" y="44" width="28" height="11" rx="2" fill="none" stroke="#0066cc" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </a>
+    </article>
+
+    <article class="feed__item">
+      <a href="geometry-dash-rl.html">
+        <div>
+          <p class="feed__kicker">Reinforcement learning &middot; Sim-to-real</p>
+          <h2 class="feed__title">Teaching an AI to play a game that kills you instantly</h2>
+          <p class="feed__deck">
+            One button, instant death, and a game that runs at 60 fps. The interesting
+            problem was not the agent &mdash; it was refusing to train inside the thing I
+            was training for.
+          </p>
+          <p class="feed__meta">4 min read &middot; Geometry Dash RL</p>
+        </div>
+        <div class="feed__thumb" aria-hidden="true">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 46 H56" stroke="#242424" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="15" y="26" width="14" height="14" rx="2" fill="#0066cc"/>
+            <path d="M34 46 L43 25 L52 46 Z" fill="none" stroke="#242424" stroke-width="2.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </a>
+    </article>
+  </main>
+
+  <footer class="pub__foot">
+    <p>
+      Written by Bhavani Shankar Ajith. Every figure in these pieces is checked
+      against the project it came from &mdash; the code and the data are linked at the
+      end of each one. <a href="../">Back to the portfolio</a>.
+    </p>
+  </footer>
+</body>
+</html>
