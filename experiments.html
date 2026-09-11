@@ -555,10 +555,9 @@
     <h1>Teaching an AI to Play Geometry Dash</h1>
     <p class="section__lead">
       The actual retail game on Steam &mdash; not a clone. One button, one square,
-      instant death on contact: a perfect testbed for frame-perfect timing.
-      Agents train in a stripped-down physics simulator that runs 2,000&times;
-      faster than the game, then a custom C++ mod drives the real thing &mdash;
-      reading game state and pressing jump in real time.
+      instant death on contact. Agents train in a simulator 2,000&times; faster than
+      real time, then a custom C++ mod drives the real game, reading state and
+      pressing jump live.
     </p>
 
     <div class="xp-diagram xp-diagram--wide">
@@ -610,9 +609,9 @@
       <div>
         <h4>how it works</h4>
         <ul>
-          <li>Training in the live game means waiting days at 60&nbsp;fps; the fast simulator turns millions of frames into seconds</li>
-          <li>A controlled bake-off: PPO &mdash; the trendy default &mdash; reliably got stuck, refusing the first risky jump because failing cost it reward; DQN and a genetic algorithm cleared every level</li>
-          <li>Sim-to-real transfer: a policy that had only ever seen the simulator drove the genuine game and jumped real spikes</li>
+          <li>Training in the real game means waiting days at 60&nbsp;fps; the simulator turns that into seconds</li>
+          <li>PPO &mdash; the trendy default &mdash; got stuck, refusing the first risky jump. DQN and a genetic algorithm cleared every level</li>
+          <li>A policy that had only ever seen the simulator then jumped real spikes in the real game</li>
         </ul>
       </div>
       <div>
@@ -638,12 +637,10 @@
     <h3 class="xp__kicker">Carbon &amp; cost-aware scheduling</h3>
     <h1>GridShift</h1>
     <p class="section__lead">
-      A training run needs four consecutive hours before a deadline &mdash; so which
-      four? Grid carbon intensity and electricity price both move hour by hour, and
-      the New York ISO publishes both a day ahead. GridShift forecasts the gap between
-      that published signal and what the grid actually did, wraps every forecast in a
-      distribution-free interval, and then optimises a deadline-constrained schedule
-      against carbon, cost and risk across 96,360 zone-hours of official market data.
+      A four-hour training job has to finish by morning. Which four hours? Carbon
+      intensity and electricity price both swing through the day, and the New York
+      grid publishes a day-ahead guess at each. GridShift learns where that guess
+      goes wrong, then picks the window.
     </p>
 
     <div class="xp-diagram xp-diagram--wide">
@@ -695,7 +692,7 @@
           <text x="657" y="142" class="diag-dim">pareto scheduler</text>
         </g>
         <g class="diag-label" text-anchor="start">
-          <text x="16" y="276" class="diag-dim">the day-ahead signal is the benchmark &mdash; both models forecast only the residual against it</text>
+          <text x="16" y="276" class="diag-dim">both models only predict how wrong the grid&rsquo;s own guess will be</text>
         </g>
       </svg>
     </div>
@@ -704,29 +701,27 @@
       <div>
         <h4>how it works</h4>
         <ul>
-          <li>The decision is committed at the start of the operating day, so every lag and rolling statistic is masked against that boundary &mdash; which matters on the 25-hour autumn day, where a plain 24-hour shift would reach into the day it is predicting</li>
-          <li>Real-time rows are stamped interval-ending and the repeated daylight-saving hour is resolved by file order, so nothing is silently dropped or collided</li>
-          <li>Two modelling philosophies compete on identical rows: XGBoost with explicit lags against a causal TCN handed the raw 168-hour sequence, 253-hour receptive field, 160,025 parameters</li>
-          <li>Causality is measured, not asserted &mdash; perturbing the second half of the input leaves the first half of the encoding bit-identical, and the test suite asserts that zero</li>
-          <li>Split conformal intervals calibrated on a chronologically separate window, grouped by hour so the risk-aware policy has something to act on</li>
+          <li>The schedule is fixed before the day begins, so no feature is allowed to look inside it</li>
+          <li>Daylight saving handled by hand: the repeated autumn hour, the missing spring one</li>
+          <li>XGBoost with hand-built lags races a causal TCN given the raw week</li>
+          <li>Conformal intervals put a 90% band on every forecast, which the risk-aware policy schedules against</li>
         </ul>
       </div>
       <div>
         <h4>what it found</h4>
         <ul>
-          <li>Shifting the job away from the first feasible window changed the realised carbon score by &minus;8.30% against running immediately, over 71 held-out days</li>
-          <li>The ML forecast did <em>not</em> improve the decision over ranking windows by the raw day-ahead signal &mdash; it was 0.72% worse, and the write-up says so</li>
-          <li>The selection rule picked the TCN on pooled fold error; XGBoost was the stronger model on the holdout. Both numbers are published rather than the better one being chosen afterwards</li>
-          <li>Carbon and cost are near-collinear inside a zone (r = 0.973) because the emission rate is derived from the same price &mdash; so the Pareto frontier collapses to one point on 44 of 71 days</li>
-          <li>Moving the job across zones beat moving it across hours: &minus;13.50% carbon and &minus;11.83% cost against the same policy pinned to New York City</li>
+          <li>Moving the job off the first available window cut the carbon score by 8.3%</li>
+          <li>But the model did <em>not</em> beat the grid&rsquo;s own forecast at picking windows. It was 0.72% worse</li>
+          <li>My selection rule chose the TCN; XGBoost was better on the holdout. Both are published</li>
+          <li>Moving the job between zones beat moving it between hours &mdash; 13.5% lower</li>
         </ul>
       </div>
     </div>
 
     <div class="spec-row" aria-label="GridShift headline metrics">
       <div class="spec-card" style="background:#e9fff4">
-        <h4>CARBON &minus;8.30%</h4>
-        <p>ZONE-HOURS &mdash; 96,360 / 11 ZONES<br>COVERAGE &mdash; 94.23% ON 90% INTERVALS<br>ORACLE BOUND &mdash; &minus;13.43%<br>CROSS-ZONE &mdash; &minus;13.50%</p>
+        <h4>CARBON &minus;8.3%</h4>
+        <p>DATA &mdash; 96,360 NYISO ZONE-HOURS<br>INTERVALS &mdash; 94% COVERAGE AT 90% NOMINAL<br>BEST POSSIBLE &mdash; &minus;13.4%</p>
       </div>
       <span class="spec-strip" style="background:#2ee6a8"></span><span class="spec-strip" style="background:#1c86ff"></span><span class="spec-strip" style="background:#ffe07a"></span>
     </div>
@@ -743,12 +738,10 @@
     <h3 class="xp__kicker">Decisions under a budget</h3>
     <h1>RetentionLab</h1>
     <p class="section__lead">
-      A retention team can only call a fraction of the base each cycle, so ranking
-      churn risk is not an accuracy contest &mdash; it is triage under a capacity
-      constraint. RetentionLab takes 7,043 telecom customers from a leakage-safe split
-      through a calibrated classifier to a capacity-ranked call list, then answers the
-      question the data cannot: how large a randomised trial would have to be before
-      anyone could claim the outreach actually worked.
+      You can only call 200 customers this week. Which 200? Ranking churn risk
+      isn&rsquo;t an accuracy contest, it&rsquo;s triage under a budget. RetentionLab turns
+      calibrated probabilities into a call list, then sizes the trial you&rsquo;d need to
+      prove the calls actually worked.
     </p>
 
     <div class="xp-diagram xp-diagram--wide">
@@ -792,7 +785,7 @@
           <text x="460" y="252" class="diag-dim">power &middot; mde</text>
         </g>
         <g class="diag-label" text-anchor="start">
-          <text x="16" y="288" class="diag-dim">every transformer is fitted inside the split &mdash; the test set is opened once, after the model is frozen</text>
+          <text x="16" y="288" class="diag-dim">nothing is fitted outside the training split</text>
         </g>
       </svg>
     </div>
@@ -801,21 +794,19 @@
       <div>
         <h4>how it works</h4>
         <ul>
-          <li>PR-AUC decides the model, not accuracy: the positive class is a 26.5% minority and the business use is ranking under a budget, so gradient boosting wins at 0.643 while <em>losing</em> on F1</li>
-          <li>Ranking quality and probability quality are separate problems &mdash; calibration is fitted with 5-fold CV on the training split alone and compared on validation, never on test</li>
-          <li>The retention policy converts probabilities into a call list at fixed capacity, reporting capture rate, precision among contacted, and lift against random outreach at each budget</li>
-          <li>The dataset records no retention action, so no causal effect is estimable from it; the project builds a prospective power/MDE module instead of inventing one</li>
-          <li>Serving is a typed FastAPI surface over a checksum-verified artifact: 12 endpoints, PSI drift against training-only reference distributions, Prometheus counters and latency histograms</li>
+          <li>PR-AUC picks the model, not accuracy &mdash; churners are only a quarter of the base</li>
+          <li>Calibration is fitted on the training split alone and judged on validation</li>
+          <li>The test set is opened once, after the model and the calibrator are frozen</li>
+          <li>Served as a typed API over a checksum-verified model, with drift monitoring</li>
         </ul>
       </div>
       <div>
         <h4>what it found</h4>
         <ul>
-          <li>Test ROC-AUC 0.855 and PR-AUC 0.670 against a 0.265 no-skill floor &mdash; roughly 2.5&times; the baseline, scored once on 1,057 held-out customers</li>
-          <li>Contacting the top 20% by risk reaches 143 of 280 churners where random outreach would reach about 56 &mdash; half of all churners from a fifth of the calls, a 2.55&times; lift</li>
-          <li>Precision decays from 75.5% to 58.2% as capacity grows from 10% to 30%, which is the expected shape and exactly what a capacity conversation needs</li>
-          <li>Calibration helped, but barely: Brier 0.13919 &rarr; 0.13809, at the cost of a slight PR-AUC decrease. The table would read the same if it had hurt</li>
-          <li>A 1,000-per-arm pilot can only detect a churn reduction of about 6 percentage points &mdash; proving a realistic 3-point offer needs 3,915 per arm at 80% power</li>
+          <li>Calling the riskiest 20% reaches 143 of 280 churners. Calling at random reaches 56</li>
+          <li>Precision falls from 76% to 58% as the budget grows, which is the shape you plan around</li>
+          <li>Calibration helped, but barely &mdash; Brier 0.13919 to 0.13809. Reported either way</li>
+          <li>The data can&rsquo;t prove the calls work, so it sizes the trial that could: 3,915 per arm</li>
         </ul>
       </div>
     </div>
@@ -823,7 +814,7 @@
     <div class="spec-row" aria-label="RetentionLab headline metrics">
       <div class="spec-card" style="background:#fff1f6">
         <h4>LIFT 2.55&times;</h4>
-        <p>TEST ROC-AUC &mdash; 0.855<br>TEST PR-AUC &mdash; 0.670 VS 0.265 FLOOR<br>TOP 20% &mdash; 143 OF 280 CHURNERS<br>MDE @ 1,000 / ARM &mdash; 6.0 pp</p>
+        <p>TOP 20% &mdash; 143 OF 280 CHURNERS<br>TEST ROC-AUC &mdash; 0.855<br>SCORED ONCE &mdash; 1,057 HELD-OUT</p>
       </div>
       <span class="spec-strip" style="background:#ff4fa0"></span><span class="spec-strip" style="background:#1c86ff"></span><span class="spec-strip" style="background:#2ee6a8"></span>
     </div>
